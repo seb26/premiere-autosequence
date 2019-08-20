@@ -1,6 +1,7 @@
 import subprocess
 import json
 import pprint
+import timecode
 
 list_of_files = [
     "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov",
@@ -54,5 +55,7 @@ for item in list_of_files:
 
         if 'time_reference' in probe['format']['tags']:
             samples_since_midnight = int(probe['format']['tags']['time_reference'])
-            frames = samples_since_midnight / audio_sample_rate
+            seconds = samples_since_midnight / audio_sample_rate
+            frames = seconds * 25
             print(frames)
+            print(timebase.toTC(frames))
