@@ -1,7 +1,14 @@
 import subprocess
 import json
 import pprint
+import xml.etree.ElementTree as ET
+
 import timecode
+
+DEFAULT_AUDIO_SAMPLE_RATE = 48000
+DEFAULT_VIDEO_FRAME_RATE = 25
+
+timebase = timecode.Timecode(25)
 
 list_of_files = [
     "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov",
@@ -9,13 +16,13 @@ list_of_files = [
     "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071223_C003.mov",
     "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov",
     "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov",
-    "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_001.WAV",
-    "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_002.WAV",
-    "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_003.WAV",
-    "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_004.WAV",
-    "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_005.WAV",
 ]
 
+
+##
+## PROBE THE FILES WITH ffprobe
+##
+files_probed = []
 for item in list_of_files:
 
     data = subprocess.run(
@@ -31,13 +38,32 @@ for item in list_of_files:
     )
     probe = json.loads(data.stdout)
 
+    FOUND_VIDEO = False
+    FOUND_AUDIO = False
+
     video_stream = next((stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
-    if video_stream is None:
-        print(item, ': No video stream found')
+    if video_stream is not None:
+        FOUND_VIDEO = True
 
     audio_stream = next((stream for stream in probe['streams'] if stream['codec_type'] == 'audio'), None)
-    if audio_stream is None:
-        print(item, ': No audio stream found')
+    if audio_stream is not None:
+        FOUND_AUDIO = True
+
+    if FOUND_VIDEO and FOUND_AUDIO == False:
+        print(item, ': this file contains neither video or audio streams')
+
+    files_probed.append( (item, probe) )
+
+
+
+##
+## ANALYSE THE BASIC METADATA
+##
+
+for clip_filepath, probe in files_probed:
+
+    video_stream = next((stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
+    audio_stream = next((stream for stream in probe['streams'] if stream['codec_type'] == 'audio'), None)
 
     if video_stream:
         frames = video_stream['nb_frames']
@@ -46,16 +72,143 @@ for item in list_of_files:
             timecode = video_stream['tags']['timecode']
         else:
             timecode = 'NA'
-        print(item, frames, framerate, timecode)
+        print(clip_filepath, frames, framerate, timecode)
     else:
         if audio_stream:
             audio_sample_rate = int(audio_stream['sample_rate'])
         else:
-            audio_sample_rate = 48000
+            audio_sample_rate = DEFAULT_AUDIO_SAMPLE_RATE
 
         if 'time_reference' in probe['format']['tags']:
             samples_since_midnight = int(probe['format']['tags']['time_reference'])
             seconds = samples_since_midnight / audio_sample_rate
-            frames = seconds * 25
-            print(frames)
-            print(timebase.toTC(frames))
+            frames = seconds * DEFAULT_VIDEO_FRAME_RATE
+            print(clip_filepath, audio_sample_rate, frames, timebase.toTC(frames))
+
+##
+## BUILD THE SEQUENCE
+##
+
+pr_xml_base_structure = """
+<bin>
+    <name>AUTOSEQUENCE_1</name>
+    <labels>
+        <label2>Mango</label2>
+    </labels>
+    <children>
+        <bin>
+            <name>AUTOSEQUENCE_1_MASTER_CLIPS</name>
+            <labels>
+                <label2>Mango</label2>
+            </labels>
+            <children>
+            </children>
+        </bin>
+        <sequence>
+            <duration />
+            <rate>
+                <timebase />
+                <ntsc />
+            </rate>
+            <name />
+            <timecode>
+                <rate>
+                    <timebase />
+                    <ntsc />
+                </rate>
+                <frame />
+                <displayformat />
+            </timecode>
+            <media>
+                <video>
+                    <format />
+                    <track />
+                </video>
+                <audio>
+                    <track />
+                </audio>
+            </media>
+        </sequence>
+    </children>
+</bin>
+"""
+
+pr_xml_video_masterclip = """
+<clip>
+    <masterclipid />
+    <ismasterclip>TRUE</ismasterclip>
+    <duration />
+    <rate>
+        <timebase />
+        <ntsc />
+    </rate>
+    <in />
+    <out />
+    <name />
+    <media>
+        <video>
+            <track>
+                <clipitem>
+                    <masterclipid />
+                    <name />
+                    <rate>
+                        <timebase />
+                        <ntsc />
+                    </rate>
+                    <alphatype />
+                    <pixelaspectratio />
+                    <anamorphic />
+                    <file>
+                        <name />
+                        <pathurl />
+                        <rate>
+                            <timebase />
+                            <ntsc />
+                        </rate>
+                        <media>
+                            <video />
+                            <audio />
+                        </media>
+                    </file>
+                </clipitem>
+            </track>
+        </video>
+    </media>
+</clip>
+"""
+
+pr_xml_video_clip_on_timeline = """
+<clipitem>
+    <masterclipid />
+    <name />
+    <enabled>TRUE</enabled>
+    <duration />
+    <rate>
+        <timebase />
+        <ntsc />
+    </rate>
+    <start />
+    <end />
+    <in />
+    <out />
+    <alphatype />
+    <file />
+    <logginginfo>
+        <description />
+        <scene />
+        <shottake />
+        <lognote />
+    </logginginfo>
+    <labels>
+        <label2>Iris</label2>
+    </labels>
+</clipitem>
+"""
+
+# Create a parsable XML from the structure written above
+tree = ET.ElementTree( ET.fromstring(pr_xml_base_structure) )
+root = tree.getroot()
+
+bin_master_clips = root.find('bin')
+
+print(bin_master_clips)

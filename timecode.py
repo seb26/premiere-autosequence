@@ -39,6 +39,3 @@ class Timecode:
         str(mn).zfill(2) + spacer +
         str(sc).zfill(2) + spacer +
         str(fr).zfill(2))
-
-timebase = Timecode(25)
-print(  timebase.toTC(2500), timebase.toFrames('12:20:13:00') )
