@@ -1,6 +1,9 @@
 import xml.etree.ElementTree as ET
 import os
 
+# APPLICATION ASSETS
+from ffprobe_xml_structure import *
+
 
 # TEMP DURING TESTING
 import timecode
@@ -13,122 +16,6 @@ list_of_files = [
     { 'filepath': "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov", 'framerate': 25, 'startTC': '12:29:23:13', 'startFrame': 1124088, 'duration': 2873 },
     { 'filepath': "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov", 'framerate': 25, 'startTC': '12:43:47:10', 'startFrame': 1145685, 'duration': 601 },
 ]
-
-pr_xml_base_structure = """
-<bin>
-    <name>AUTOSEQUENCE_1</name>
-    <labels>
-        <label2>Mango</label2>
-    </labels>
-    <children>
-        <bin>
-            <name>AUTOSEQUENCE_1_MASTER_CLIPS</name>
-            <labels>
-                <label2>Mango</label2>
-            </labels>
-            <children>
-            </children>
-        </bin>
-        <sequence>
-            <duration />
-            <rate>
-                <timebase />
-                <ntsc>FALSE</ntsc>
-            </rate>
-            <name />
-            <timecode>
-                <rate>
-                    <timebase />
-                    <ntsc>FALSE</ntsc>
-                </rate>
-                <frame />
-                <displayformat />
-            </timecode>
-            <media>
-                <video>
-                    <format />
-                    <track />
-                </video>
-                <audio>
-                    <track />
-                </audio>
-            </media>
-        </sequence>
-    </children>
-</bin>
-"""
-
-pr_xml_video_masterclip = """
-<clip>
-    <masterclipid />
-    <ismasterclip>TRUE</ismasterclip>
-    <duration />
-    <rate>
-        <timebase />
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <in />
-    <out />
-    <name />
-    <media>
-        <video>
-            <track>
-                <clipitem>
-                    <masterclipid />
-                    <name />
-                    <rate>
-                        <timebase />
-                        <ntsc>FALSE</ntsc>
-                    </rate>
-                    <alphatype />
-                    <pixelaspectratio />
-                    <anamorphic />
-                    <file>
-                        <name />
-                        <pathurl />
-                        <rate>
-                            <timebase />
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video />
-                            <audio />
-                        </media>
-                    </file>
-                </clipitem>
-            </track>
-        </video>
-    </media>
-</clip>
-"""
-
-pr_xml_video_clip_on_timeline = """
-<clipitem>
-    <masterclipid />
-    <name />
-    <enabled>TRUE</enabled>
-    <duration />
-    <rate>
-        <timebase />
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start />
-    <end />
-    <in />
-    <out />
-    <alphatype />
-    <file />
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem>
-"""
 
 def setElem(target, element, value):
     """Given an element (1. target),
