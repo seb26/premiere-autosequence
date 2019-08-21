@@ -35,7 +35,7 @@ class MediaFile(object):
         if os.path.isfile(filepath):
             self.filepath = filepath
             self.filename = os.path.basename(self.filepath)
-            self.fileURL = 'localhost://' + quote( self.filepath.replace(os.sep, '/') )
+            self.fileURL = 'file://localhost' + quote( self.filepath.replace(os.sep, '/') )
         else:
             print(filepath, ': this file does not exist.')
             return None
@@ -170,11 +170,11 @@ media_files.sort()
 def setElem(target, element, value):
     """Given an element (1. target),
     quickly add an <element> to it (2. element),
-    and then set its text contents (3. value).
+    and then set its text contents (3. value). CONVERTS TO STRING.
 
     Returns the element at the end, if you need it"""
     e = target.find(element)
-    e.text = value
+    e.text = str(value)
     return e
 
 # Create a parsable XML from the structure written above
@@ -220,31 +220,26 @@ for k, v in pr_xml_default_sequence_audio_track_attributes.items():
 sequence_total_duration = media_files[-1].startFrame + media_files[-1].duration - media_files[0].startFrame
 setElem(sequence, 'duration', str(sequence_total_duration))
 
-index = 0
+index = 1
 for media in media_files:
 
-    strMediaFrameRate = str(media.frameRate)
-    strMediaDuration = str(media.duration)
-    strMediaStartFrame = str(media.startFrame)
-
     # Establish the sequence with the characteristics of the first clip
-    if index == 0:
-        setElem(sequence.find('rate'), 'timebase', strMediaFrameRate)
+    if index == 1:
+        setElem(sequence.find('rate'), 'timebase', media.frameRate)
         sequence_timecode = sequence.find('timecode')
-        setElem(sequence_timecode.find('rate'), 'timebase', strMediaFrameRate)
-        setElem(sequence_timecode, 'frame', strMediaStartFrame)
+        setElem(sequence_timecode.find('rate'), 'timebase', media.frameRate)
+        setElem(sequence_timecode, 'frame', media.startFrame)
         setElem(sequence_timecode, 'string', media.timecode)
 
         video_track_format = sequence.find('media').find('video').find('format').find('samplecharacteristics')
-        setElem(video_track_format.find('rate'), 'timebase', strMediaFrameRate)
+        setElem(video_track_format.find('rate'), 'timebase', media.frameRate)
         setElem(video_track_format.find('codec'), 'name', media.codec_name)
-        setElem(video_track_format, 'width', str(media.width))
-        setElem(video_track_format, 'height', str(media.height))
+        setElem(video_track_format, 'width', media.width)
+        setElem(video_track_format, 'height', media.height)
         setElem(video_track_format, 'pixelaspectratio', media.pixelAspectRatio)
         setElem(video_track_format, 'fielddominance', media.fieldDominance)
 
-    index += 1
-    masterID = str(index) # + '_' + media.filename
+    masterID = 'MASTER_' + str(index)
     masterID_component = masterID + '_COMPONENT_1'
     masterID_file = masterID + '_FILE_1'
 
@@ -255,10 +250,10 @@ for media in media_files:
     setElem(master_clip_root, 'name', media.filename)
     setElem(master_clip_root, 'masterclipid', masterID)
     master_clip_root.set('id', masterID)
-    setElem(master_clip_root.find('rate'), 'timebase', strMediaFrameRate)
-    setElem(master_clip_root, 'duration', strMediaDuration)
+    setElem(master_clip_root.find('rate'), 'timebase', media.frameRate)
+    setElem(master_clip_root, 'duration', media.duration)
     setElem(master_clip_root, 'in', '0')
-    setElem(master_clip_root, 'out', strMediaDuration)
+    setElem(master_clip_root, 'out', media.duration)
     set
 
     # Go inside and add directly to the video track
@@ -266,26 +261,42 @@ for media in media_files:
     setElem(master_clip_track, 'name', media.filename)
     setElem(master_clip_track, 'masterclipid', masterID)
     master_clip_track.set('id', masterID_component)
-    setElem(master_clip_track.find('rate'), 'timebase', strMediaFrameRate)
+    setElem(master_clip_track.find('rate'), 'timebase', media.frameRate)
 
     # And then set the <file> attributes as well
     master_clip_file = master_clip_track.find('file')
     setElem(master_clip_file, 'name', media.filename)
     setElem(master_clip_file, 'pathurl', media.fileURL)
-    setElem(master_clip_file.find('rate'), 'timebase', strMediaFrameRate)
+    setElem(master_clip_file.find('rate'), 'timebase', media.frameRate)
     master_clip_file.set('id', masterID_file)
 
     # Append it to the Master clips bin
     bin_master_clips_items.append(master_clip_root)
 
     # Write it to the sequence
-    previous_point = 0
-    if index == 0:
-        # If the first file, stick it right at the front.
-        clip_point_on_timeline = 0
-    else:
-        clip_point_on_timeline = previous_point + media.startFrame
-    # Then indicate where this clip ends. Referred to as 'previous clip'.
-    previous_point = media.startFrame + media.duration
+    if index == 1:
+        sequence_startFrame = media.startFrame
+
+    clip_timeline_start = media.startFrame - sequence_startFrame
+    clip_timeline_end = clip_timeline_start + media.duration
+    clip_timeline_in = "0"
+    clip_timeline_out = media.duration
+
+    add_clip_to_timeline = ET.fromstring(pr_xml_video_clip_on_timeline)
+    setElem(add_clip_to_timeline, 'masterclipid', masterID)
+    # Re-add the file details from the masterclip
+    add_clip_to_timeline.find('file').append(master_clip_file)
+    add_clip_to_timeline.find('file').set('id', masterID_file)
+    setElem(add_clip_to_timeline, 'name', media.filename)
+    setElem(add_clip_to_timeline, 'duration', media.duration)
+    setElem(add_clip_to_timeline.find('rate'), 'timebase', media.frameRate)
+    setElem(add_clip_to_timeline, 'start', clip_timeline_start)
+    setElem(add_clip_to_timeline, 'end', clip_timeline_end)
+    setElem(add_clip_to_timeline, 'in', clip_timeline_in)
+    setElem(add_clip_to_timeline, 'out', clip_timeline_out)
+    video_track.append(add_clip_to_timeline)
+
+    # Move onto next media file
+    index += 1
 
 ET.dump(tree)
