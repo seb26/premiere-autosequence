@@ -9,6 +9,14 @@ from ffprobe_xml_structure import *
 import timecode
 
 list_of_files = [
+    "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov",
+    "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071221_C002.mov",
+    "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071223_C003.mov",
+    "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov",
+    "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov",
+]
+
+list_of_files = [
 
     { 'filepath': "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov", 'framerate': 25, 'startTC': '12:20:13:00', 'startFrame': 1110325, 'duration': 923 },
     { 'filepath': "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071221_C002.mov", 'framerate': 25, 'startTC': '12:21:30:01', 'startFrame': 1112251, 'duration': 918 },
