@@ -35,7 +35,7 @@ class MediaFile(object):
         if os.path.isfile(filepath):
             self.filepath = filepath
             self.filename = os.path.basename(self.filepath)
-            self.fileURL = 'file://localhost' + quote( self.filepath.replace(os.sep, '/') )
+            self.fileURL = 'file://localhost/' + quote( self.filepath.replace(os.sep, '/') )
         else:
             print(filepath, ': this file does not exist.')
             return None
