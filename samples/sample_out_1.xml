@@ -37,7 +37,7 @@
                     <anamorphic>FALSE</anamorphic>
                     <file id="MASTER_1_FILE_1">
                         <name>A001_06071220_C001.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071220_C001.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071220_C001.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -86,7 +86,7 @@
                     <anamorphic>FALSE</anamorphic>
                     <file id="MASTER_2_FILE_1">
                         <name>A001_06071221_C002.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071221_C002.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071221_C002.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -135,7 +135,7 @@
                     <anamorphic>FALSE</anamorphic>
                     <file id="MASTER_3_FILE_1">
                         <name>A001_06071223_C003.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071223_C003.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071223_C003.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -184,7 +184,7 @@
                     <anamorphic>FALSE</anamorphic>
                     <file id="MASTER_4_FILE_1">
                         <name>A001_06071229_C004.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071229_C004.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071229_C004.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -233,7 +233,7 @@
                     <anamorphic>FALSE</anamorphic>
                     <file id="MASTER_5_FILE_1">
                         <name>A001_06071243_C005.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071243_C005.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071243_C005.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -312,7 +312,7 @@
     <alphatype />
     <file id="MASTER_1_FILE_1"><file id="MASTER_1_FILE_1">
                         <name>A001_06071220_C001.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071220_C001.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071220_C001.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -348,7 +348,7 @@
     <alphatype />
     <file id="MASTER_2_FILE_1"><file id="MASTER_2_FILE_1">
                         <name>A001_06071221_C002.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071221_C002.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071221_C002.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -384,7 +384,7 @@
     <alphatype />
     <file id="MASTER_3_FILE_1"><file id="MASTER_3_FILE_1">
                         <name>A001_06071223_C003.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071223_C003.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071223_C003.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -420,7 +420,7 @@
     <alphatype />
     <file id="MASTER_4_FILE_1"><file id="MASTER_4_FILE_1">
                         <name>A001_06071229_C004.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071229_C004.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071229_C004.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
@@ -456,7 +456,7 @@
     <alphatype />
     <file id="MASTER_5_FILE_1"><file id="MASTER_5_FILE_1">
                         <name>A001_06071243_C005.mov</name>
-                        <pathurl>localhost://Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071243_C005.mov</pathurl>
+                        <pathurl>file://localhost/Q%3A/Projects/HAZEN_ALPHA/MEDIA_OCM/DAY%201/A001_06071243_C005.mov</pathurl>
                         <rate>
                             <timebase>25</timebase>
                             <ntsc>FALSE</ntsc>
