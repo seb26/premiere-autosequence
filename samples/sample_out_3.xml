@@ -10,7 +10,131 @@
                 <labels>
                     <label2>Mango</label2>
                 </labels>
-                <children>
+				<children>
+					<clip explodedTracks="true" id="masterclipID-1">
+					<duration>1690</duration>
+					<ismasterclip>True</ismasterclip>
+					<name>T001C010_190511_R6XC.[1043405-1045094]</name>
+					<masterclipid>masterclipID-1</masterclipid>
+					<labels>
+						<label2>Iris</label2>
+					</labels>
+					<rate>
+						<timebase>25</timebase>
+						<ntsc>FALSE</ntsc>
+					</rate>
+					<media>
+						<video>
+							<track>
+								<clipitem id="clipitemID-1">
+									<masterclipid>masterclipID-1</masterclipid>
+									<rate>
+										<timebase>25</timebase>
+										<ntsc>FALSE</ntsc>
+									</rate>
+									<alphatype>none</alphatype>
+									<pixelaspectratio>square</pixelaspectratio>
+									<anamorphic>FALSE</anamorphic>
+									<file id="fileID-1">
+										<name>T001C010_190511_R6XC.[1043405-1045094]</name>
+										<rate>
+											<timebase>25</timebase>
+											<ntsc>FALSE</ntsc>
+										</rate>
+										<duration>1690</duration>
+										<pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C010_190511_R6XC.%5B1043405-1045094%5D.mov</pathurl>
+										<timecode>
+											<rate>
+												<timebase>25</timebase>
+												<ntsc>FALSE</ntsc>
+											</rate>
+											<string>11:35:36:05</string>
+											<frame>1043405</frame>
+											<displayformat />
+										</timecode>
+										<media>
+											<video>
+												<samplecharacteristics>
+													<width>1678</width>
+													<height>1080</height>
+													<fielddominance>none</fielddominance>
+													<rate>
+														<timebase>25</timebase>
+														<ntsc>FALSE</ntsc>
+													</rate>
+													<anamorphic>FALSE</anamorphic>
+													<pixelaspectratio>square</pixelaspectratio>
+												</samplecharacteristics>
+											</video>
+										</media>
+									</file>
+								</clipitem>
+							</track>
+						</video>
+					</media>
+					</clip>
+					<clip explodedTracks="true" id="masterclipID-2">
+					<duration>2583</duration>
+					<ismasterclip>True</ismasterclip>
+					<name>A002C001_190511_R6XC.[1230177-1232759]</name>
+					<masterclipid>masterclipID-2</masterclipid>
+					<labels>
+						<label2>Iris</label2>
+					</labels>
+					<rate>
+						<timebase>25</timebase>
+						<ntsc>FALSE</ntsc>
+					</rate>
+					<media>
+						<video>
+							<track>
+								<clipitem id="clipitemID-2">
+									<masterclipid>masterclipID-2</masterclipid>
+									<rate>
+										<timebase>25</timebase>
+										<ntsc>FALSE</ntsc>
+									</rate>
+									<alphatype>none</alphatype>
+									<pixelaspectratio>square</pixelaspectratio>
+									<anamorphic>FALSE</anamorphic>
+									<file id="fileID-2">
+										<name>A002C001_190511_R6XC.[1230177-1232759]</name>
+										<rate>
+											<timebase>25</timebase>
+											<ntsc>FALSE</ntsc>
+										</rate>
+										<duration>2583</duration>
+										<pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C001_190511_R6XC.%5B1230177-1232759%5D.mov</pathurl>
+										<timecode>
+											<rate>
+												<timebase>25</timebase>
+												<ntsc>FALSE</ntsc>
+											</rate>
+											<string>13:40:07:02</string>
+											<frame>1230177</frame>
+											<displayformat />
+										</timecode>
+										<media>
+											<video>
+												<samplecharacteristics>
+													<width>1678</width>
+													<height>1080</height>
+													<fielddominance>none</fielddominance>
+													<rate>
+														<timebase>25</timebase>
+														<ntsc>FALSE</ntsc>
+													</rate>
+													<anamorphic>FALSE</anamorphic>
+													<pixelaspectratio>square</pixelaspectratio>
+												</samplecharacteristics>
+											</video>
+										</media>
+									</file>
+								</clipitem>
+							</track>
+						</video>
+					</media>
+					</clip>
                 <clip explodedTracks="true" id="MASTER_1">
     <masterclipid>MASTER_1</masterclipid>
     <ismasterclip>TRUE</ismasterclip>
@@ -1465,1232 +1589,6 @@
     </labels>
 </clip></children>
             </bin>
-
-
-            <sequence MZ.EditLine="359280230400000" MZ.Sequence.AudioTimeDisplayFormat="200" MZ.Sequence.EditingModeGUID="d8484cf3-c96c-4622-ab1f-ac1a16e196f9" MZ.Sequence.PreviewFrameSizeHeight="1080" MZ.Sequence.PreviewFrameSizeWidth="1920" MZ.Sequence.PreviewRenderingClassID="1297106761" MZ.Sequence.PreviewRenderingPresetCodec="1297107278" MZ.Sequence.PreviewRenderingPresetPath="EncoderPresets\SequencePreview\d8484cf3-c96c-4622-ab1f-ac1a16e196f9\I-Frame Only MPEG.epr" MZ.Sequence.PreviewUseMaxBitDepth="false" MZ.Sequence.PreviewUseMaxRenderQuality="false" MZ.Sequence.VideoTimeDisplayFormat="101" MZ.WorkInPoint="0" MZ.WorkOutPoint="72272632320000" MZ.ZeroPoint="11281612608000000" Monitor.ProgramZoomIn="0" Monitor.ProgramZoomOut="365386775040000" TL.SQAVDividerPosition="0.5" TL.SQAudioVisibleBase="0" TL.SQHeaderWidth="236" TL.SQHideShyTracks="0" TL.SQTimePerPixel="2.2205228758169935" TL.SQVideoVisibleBase="0" TL.SQVisibleBaseTime="0" explodedTracks="true" id="AUTOSEQ_1">
-                <duration>934629</duration>
-                <rate>
-                    <timebase>25</timebase>
-                    <ntsc>FALSE</ntsc>
-                </rate>
-                <name>AUTOSEQ_1</name>
-                <timecode>
-                    <rate>
-                        <timebase>25</timebase>
-                        <ntsc>FALSE</ntsc>
-                    </rate>
-                    <string>08:34:02:21</string>
-                    <frame>771071</frame>
-                    <displayformat>NDF</displayformat>
-                </timecode>
-                <media>
-                    <video>
-                        <format>
-							<samplecharacteristics>
-								<rate>
-									<timebase />
-									<ntsc>FALSE</ntsc>
-								</rate>
-								<codec>
-									<name>prores</name>
-								</codec>
-								<width />
-								<height />
-								<pixelaspectratio />
-								<fielddominance />
-							<samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </samplecharacteristics>
-						</format>
-                        <track MZ.TrackTargeted="1" TL.SQTrackExpanded="0" TL.SQTrackExpandedHeight="25" TL.SQTrackShy="0">
-                            <enabled>TRUE</enabled>
-							<locked>FALSE</locked>
-                        <clipitem>
-    <masterclipid>MASTER_1</masterclipid>
-    <name>T001C001_190510_R6XC.[0771071-0773182].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2112</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>0</start>
-    <end>2112</end>
-    <in>0</in>
-    <out>2112</out>
-    <alphatype />
-    <file id="MASTER_1_FILE_1"><file id="MASTER_1_FILE_1">
-                        <name>T001C001_190510_R6XC.[0771071-0773182].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C001_190510_R6XC.%5B0771071-0773182%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_2</masterclipid>
-    <name>T001C002_190510_R6XC.[0775552-0777995].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2444</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>4481</start>
-    <end>6925</end>
-    <in>0</in>
-    <out>2444</out>
-    <alphatype />
-    <file id="MASTER_2_FILE_1"><file id="MASTER_2_FILE_1">
-                        <name>T001C002_190510_R6XC.[0775552-0777995].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C002_190510_R6XC.%5B0775552-0777995%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_3</masterclipid>
-    <name>T001C004_190510_R6XC.[0812500-0814970].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2471</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>41429</start>
-    <end>43900</end>
-    <in>0</in>
-    <out>2471</out>
-    <alphatype />
-    <file id="MASTER_3_FILE_1"><file id="MASTER_3_FILE_1">
-                        <name>T001C004_190510_R6XC.[0812500-0814970].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C004_190510_R6XC.%5B0812500-0814970%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_4</masterclipid>
-    <name>T001C005_190510_R6XC.[0844782-0846615].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>1834</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>73711</start>
-    <end>75545</end>
-    <in>0</in>
-    <out>1834</out>
-    <alphatype />
-    <file id="MASTER_4_FILE_1"><file id="MASTER_4_FILE_1">
-                        <name>T001C005_190510_R6XC.[0844782-0846615].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C005_190510_R6XC.%5B0844782-0846615%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_5</masterclipid>
-    <name>T001C006_190510_R6XC.[0945567-0954891].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>9325</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>174496</start>
-    <end>183821</end>
-    <in>0</in>
-    <out>9325</out>
-    <alphatype />
-    <file id="MASTER_5_FILE_1"><file id="MASTER_5_FILE_1">
-                        <name>T001C006_190510_R6XC.[0945567-0954891].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C006_190510_R6XC.%5B0945567-0954891%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_6</masterclipid>
-    <name>T001C007_190511_R6XC.[0975322-0977760].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2439</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>204251</start>
-    <end>206690</end>
-    <in>0</in>
-    <out>2439</out>
-    <alphatype />
-    <file id="MASTER_6_FILE_1"><file id="MASTER_6_FILE_1">
-                        <name>T001C007_190511_R6XC.[0975322-0977760].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C007_190511_R6XC.%5B0975322-0977760%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_7</masterclipid>
-    <name>T001C008_190511_R6XC.[0998481-0999978].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>1498</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>227410</start>
-    <end>228908</end>
-    <in>0</in>
-    <out>1498</out>
-    <alphatype />
-    <file id="MASTER_7_FILE_1"><file id="MASTER_7_FILE_1">
-                        <name>T001C008_190511_R6XC.[0998481-0999978].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C008_190511_R6XC.%5B0998481-0999978%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_8</masterclipid>
-    <name>T001C009_190511_R6XC.[1020697-1022390].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>1694</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>249626</start>
-    <end>251320</end>
-    <in>0</in>
-    <out>1694</out>
-    <alphatype />
-    <file id="MASTER_8_FILE_1"><file id="MASTER_8_FILE_1">
-                        <name>T001C009_190511_R6XC.[1020697-1022390].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C009_190511_R6XC.%5B1020697-1022390%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_9</masterclipid>
-    <name>T001C010_190511_R6XC.[1043405-1045094].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>1690</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>272334</start>
-    <end>274024</end>
-    <in>0</in>
-    <out>1690</out>
-    <alphatype />
-    <file id="MASTER_9_FILE_1"><file id="MASTER_9_FILE_1">
-                        <name>T001C010_190511_R6XC.[1043405-1045094].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C010_190511_R6XC.%5B1043405-1045094%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_10</masterclipid>
-    <name>A002C001_190511_R6XC.[1230177-1232759].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2583</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>459106</start>
-    <end>461689</end>
-    <in>0</in>
-    <out>2583</out>
-    <alphatype />
-    <file id="MASTER_10_FILE_1"><file id="MASTER_10_FILE_1">
-                        <name>A002C001_190511_R6XC.[1230177-1232759].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C001_190511_R6XC.%5B1230177-1232759%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_11</masterclipid>
-    <name>A002C002_190511_R6XC.[1238357-1239433].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>1077</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>467286</start>
-    <end>468363</end>
-    <in>0</in>
-    <out>1077</out>
-    <alphatype />
-    <file id="MASTER_11_FILE_1"><file id="MASTER_11_FILE_1">
-                        <name>A002C002_190511_R6XC.[1238357-1239433].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C002_190511_R6XC.%5B1238357-1239433%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_12</masterclipid>
-    <name>A002C003_190511_R6XC.[1240863-1243708].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2846</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>469792</start>
-    <end>472638</end>
-    <in>0</in>
-    <out>2846</out>
-    <alphatype />
-    <file id="MASTER_12_FILE_1"><file id="MASTER_12_FILE_1">
-                        <name>A002C003_190511_R6XC.[1240863-1243708].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C003_190511_R6XC.%5B1240863-1243708%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_13</masterclipid>
-    <name>A002C004_190511_R6XC.[1245536-1249161].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>3626</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>474465</start>
-    <end>478091</end>
-    <in>0</in>
-    <out>3626</out>
-    <alphatype />
-    <file id="MASTER_13_FILE_1"><file id="MASTER_13_FILE_1">
-                        <name>A002C004_190511_R6XC.[1245536-1249161].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C004_190511_R6XC.%5B1245536-1249161%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_14</masterclipid>
-    <name>A002C005_190511_R6XC.[1252221-1255242].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>3022</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>481150</start>
-    <end>484172</end>
-    <in>0</in>
-    <out>3022</out>
-    <alphatype />
-    <file id="MASTER_14_FILE_1"><file id="MASTER_14_FILE_1">
-                        <name>A002C005_190511_R6XC.[1252221-1255242].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C005_190511_R6XC.%5B1252221-1255242%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_15</masterclipid>
-    <name>A002C006_190511_R6XC.[1280886-1283330].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>2445</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>509815</start>
-    <end>512260</end>
-    <in>0</in>
-    <out>2445</out>
-    <alphatype />
-    <file id="MASTER_15_FILE_1"><file id="MASTER_15_FILE_1">
-                        <name>A002C006_190511_R6XC.[1280886-1283330].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C006_190511_R6XC.%5B1280886-1283330%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_16</masterclipid>
-    <name>A002C007_190511_R6XC.[1284452-1286174].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>1723</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>513381</start>
-    <end>515104</end>
-    <in>0</in>
-    <out>1723</out>
-    <alphatype />
-    <file id="MASTER_16_FILE_1"><file id="MASTER_16_FILE_1">
-                        <name>A002C007_190511_R6XC.[1284452-1286174].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C007_190511_R6XC.%5B1284452-1286174%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_17</masterclipid>
-    <name>A003C001_190511_R6XC.[1540211-1544727].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>4517</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>769140</start>
-    <end>773657</end>
-    <in>0</in>
-    <out>4517</out>
-    <alphatype />
-    <file id="MASTER_17_FILE_1"><file id="MASTER_17_FILE_1">
-                        <name>A003C001_190511_R6XC.[1540211-1544727].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A003C001_190511_R6XC.%5B1540211-1544727%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_18</masterclipid>
-    <name>A003C002_190511_R6XC.[1562614-1566466].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>3853</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>791543</start>
-    <end>795396</end>
-    <in>0</in>
-    <out>3853</out>
-    <alphatype />
-    <file id="MASTER_18_FILE_1"><file id="MASTER_18_FILE_1">
-                        <name>A003C002_190511_R6XC.[1562614-1566466].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A003C002_190511_R6XC.%5B1562614-1566466%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_19</masterclipid>
-    <name>A003C003_190511_R6XC.[1572393-1580542].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>8150</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>801322</start>
-    <end>809472</end>
-    <in>0</in>
-    <out>8150</out>
-    <alphatype />
-    <file id="MASTER_19_FILE_1"><file id="MASTER_19_FILE_1">
-                        <name>A003C003_190511_R6XC.[1572393-1580542].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A003C003_190511_R6XC.%5B1572393-1580542%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_20</masterclipid>
-    <name>A003C004_190511_R6XC.[1582384-1587340].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>4957</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>811313</start>
-    <end>816270</end>
-    <in>0</in>
-    <out>4957</out>
-    <alphatype />
-    <file id="MASTER_20_FILE_1"><file id="MASTER_20_FILE_1">
-                        <name>A003C004_190511_R6XC.[1582384-1587340].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A003C004_190511_R6XC.%5B1582384-1587340%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_21</masterclipid>
-    <name>A003C005_190511_R6XC.[1680865-1684154].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>3290</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>909794</start>
-    <end>913084</end>
-    <in>0</in>
-    <out>3290</out>
-    <alphatype />
-    <file id="MASTER_21_FILE_1"><file id="MASTER_21_FILE_1">
-                        <name>A003C005_190511_R6XC.[1680865-1684154].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A003C005_190511_R6XC.%5B1680865-1684154%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem><clipitem>
-    <masterclipid>MASTER_22</masterclipid>
-    <name>A003C006_190511_R6XC.[1687928-1691424].mov</name>
-    <enabled>TRUE</enabled>
-    <duration>3497</duration>
-    <rate>
-        <timebase>25</timebase>
-        <ntsc>FALSE</ntsc>
-    </rate>
-    <start>916857</start>
-    <end>920354</end>
-    <in>0</in>
-    <out>3497</out>
-    <alphatype />
-    <file id="MASTER_22_FILE_1"><file id="MASTER_22_FILE_1">
-                        <name>A003C006_190511_R6XC.[1687928-1691424].mov</name>
-                        <pathurl>file://localhost/Q%3A/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A003C006_190511_R6XC.%5B1687928-1691424%5D.mov</pathurl>
-                        <rate>
-                            <timebase>25</timebase>
-                            <ntsc>FALSE</ntsc>
-                        </rate>
-                        <media>
-                            <video>
-                                <samplecharacteristics>
-                                    <rate>
-                                        <timebase>25</timebase>
-                                        <ntsc>FALSE</ntsc>
-                                    </rate>
-                                    <width>1678</width>
-                                    <height>1080</height>
-                                    <pixelaspectratio>square</pixelaspectratio>
-                                    <fielddominance>none</fielddominance>
-                                </samplecharacteristics>
-                            </video>
-                            <audio>
-                                <samplecharacteristics>
-                                    <depth />
-                                    <samplerate />
-                                </samplecharacteristics>
-                                <channelcount />
-                            </audio>
-                        </media>
-                    </file>
-                </file>
-    <logginginfo>
-        <description />
-        <scene />
-        <shottake />
-        <lognote />
-    </logginginfo>
-    <labels>
-        <label2>Iris</label2>
-    </labels>
-</clipitem></track>
-                    </video>
-                    <audio>
-                        <track MZ.TrackTargeted="1" PannerCurrentValue="0.5" PannerName="Balance" PannerStartKeyframe="-91445760000000000,0.5,0,0,0,0,0,0" TL.SQTrackAudioKeyframeStyle="0" TL.SQTrackExpanded="0" TL.SQTrackExpandedHeight="25" TL.SQTrackShy="0" currentExplodedTrackIndex="0" premiereTrackType="Mono" totalExplodedTrackCount="1">
-                            <enabled>TRUE</enabled>
-							<locked>FALSE</locked>
-                            <outputchannelindex />
-                        </track>
-                    </audio>
-                </media>
-            </sequence>
-
 
         </children>
     </bin>
