@@ -14,25 +14,35 @@ from ffprobe_xml_structure import *
 
 # DEFAULTS
 DEFAULT_AUDIO_SAMPLE_RATE = 48000
+DEFAULT_AUDIO_BIT_DEPTH = 16
+DEFAULT_AUDIO_CHANNELS = 2
+
 DEFAULT_VIDEO_FRAME_RATE = 25
 DEFAULT_VIDEO_TIMECODE_DISPLAYFORMAT = 'NDF'
 TIMEBASE = timecode.Timecode(DEFAULT_VIDEO_FRAME_RATE)
-DEFAULT_SEQUENCE_COLOURDEPTH = 24 # bit
-
 VALID_FRAME_RATES = [ 23.976, 23.98, 24, 25, 29.97, 30 ]
 
+DEFAULT_SEQUENCE_COLOURDEPTH = 24 # bit
+DEFAULT_SEQUENCE_AUDIO_OUTPUT_CHANNELS = 2
+
 DEFAULT_LABEL_COLOUR_VIDEO = 'Iris'
-DEFAULT_LABEL_COLOUR_AUDIO = 'Mango'
+DEFAULT_LABEL_COLOUR_AUDIO = 'Caribbean'
 DEFAULT_LABEL_COLOUR_SEQUENCE = 'Rose'
+DEFAULT_LABEL_COLOUR_BIN = 'Mango'
+
+DEFAULT_XMEML_VERSION = '4'
 
 # PROTOTYPE FILE DATA
 # TEMPORARY
-list_of_files = [
+TEMP_LIST_OF_FILES = [
 "Q:\\Projects\\PRODIGAL_SON\\MEDIA\\190511_D01\\AUDIO\\PM\\190511\\190511_018.WAV",
 "Q:\\Projects\\PRODIGAL_SON\\MEDIA\\190511_D01\\AUDIO\\PM\\190511\\190511_001.WAV",
 "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\T001C010_190511_R6XC.[1043405-1045094].mov",
 "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\A002C001_190511_R6XC.[1230177-1232759].mov",
 ]
+
+TEMP_OUTPUT_XML_TO = 'samples\sample_out_4.xml'
+
 
 
 class MediaItem(object):
@@ -107,7 +117,7 @@ class MediaItem(object):
                 try:
                     self._timebase.validateTC(found_timecode)
                     self.timecode = found_timecode
-                    self.startFrame = str(self._timebase.toFrames(found_timecode))
+                    self.startFrame = self._timebase.toFrames(found_timecode)
                 except ValueError:
                     # Well, it had something, but it didn't validate
                     print(self.filepath, ': this file doesn\'t have embedded timecode.')
@@ -150,8 +160,11 @@ class MediaItem(object):
             # Ignore subsequent audio streams (note, this doesn't refer to channels)
             audio_stream = audio_streams[0]
             self.audio_sample_rate = int(audio_stream['sample_rate'])
-            self.audioChannels = audio_stream['channels']
-            self.audioBitDepth = audio_stream['bits_per_raw_sample']
+            self.audio_channels = audio_stream['channels']
+            self.audio_bit_depth = audio_stream['bits_per_raw_sample']
+        else:
+            # Otherwise, be explicit
+            self.audio_channels = 0
 
         if self.mediaType == 'audio':
             # Establish the timecode & duration, only for audio files
@@ -233,6 +246,7 @@ def xml_add_framerate(frameRate, ntsc='FALSE'):
 
 def xml_add_label(colour):
     # Returns: <labels><label2>colour</label2></labels>
+    # Refer explicitly to the DEFAULT_LABEL_COLOUR series of attributes if you want them.
     labels = ET.Element('labels')
     label2 = ET.SubElement(labels, 'label2')
     label2.text = colour
@@ -255,10 +269,29 @@ class BuildXML:
         self.index[indexType] += 1
         return indexType + '-' + str(self.index[indexType])
 
+    def xml_bin_create(self, text_label, colour=None):
+        # Sets up a bin, when you give it a name, or optional colour (explicit)
+        bin = ET.Element('bin')
+        bin_name = createElem(bin, 'name', text_label)
+        if colour:
+            bin_label = xml_add_label(colour)
+        else:
+            bin_label = xml_add_label(DEFAULT_LABEL_COLOUR_BIN)
+            bin.append(bin_label)
+
+        bin_children = createElem(bin, 'children')
+        return bin
+
+    def xml_bin_add_item(self, bin, item):
+        # Adds a given item to your bin, by putting it inside its <children> tag
+        bin.find('children').append(item)
+        return
+
+
     def xml_masterclip_video(self, media_item):
         clip = ET.Element('clip')
-        duration = createElem(clip, 'duration', str(media_item.duration))
-        ismasterclip = createElem(clip, 'ismasterclip', 'True')
+        duration = createElem(clip, 'duration', media_item.duration)
+        ismasterclip = createElem(clip, 'ismasterclip', 'TRUE')
         name = createElem(clip, 'name', media_item.name)
 
         # Increment the masterclipID, and assign it back to the [media_item]
@@ -305,7 +338,7 @@ class BuildXML:
         timecode.append(rate)
         timecode_string = createElem(timecode, 'string', media_item.timecode)
         timecode_frame = createElem(timecode, 'frame', media_item.startFrame)
-        timecode_displayformat = createElem(timecode, 'displayformat')
+        timecode_displayformat = createElem(timecode, 'displayformat', DEFAULT_VIDEO_TIMECODE_DISPLAYFORMAT)
         # reel?
 
         file_tag_media = createElem(file_tag, 'media')
@@ -320,28 +353,10 @@ class BuildXML:
 
         return clip
 
-    def xml_autosequence_duration(self, media_items):
-        """
-        # Then get the intended duration of the sequence
-        # This is:
-        #       Find which is earliest, video or audio
-        #       Find which is latest, video or audio
-        #       Latest startTC + duration - Earliest startTC
-        #       == Total sequence duration
-        earliest_clip = min(media_items['video'][0], media_items['audio'][0])
-        earliest_clip_startFrame = earliest_clip.startFrame
-        latest_clip = max(media_items['video'][-1], media_items['audio'][-1])
-        latest_clip_endFrame = latest_clip.startFrame + latest_clip.duration
-
-        sequence_total_duration = latest_clip_endFrame - earliest_clip_startFrame
-        setElem(sequence, 'duration', str(sequence_total_duration))
-        """
-        return 90000
-
-    def xml_sequence_from(self, media_item, sequence_length):
+    def xml_sequence_from(self, media_item, sequence_length, num_seq_audio_channels):
         sequence = ET.Element('sequence')
         sequenceID = self._increment('sequenceID')
-        clip.set('id', sequenceID )
+        sequence.set('id', sequenceID )
         # Other sequence attributes here!
 
         duration = createElem(sequence, 'duration', str(sequence_length))
@@ -354,14 +369,18 @@ class BuildXML:
         label = xml_add_label(DEFAULT_LABEL_COLOUR_SEQUENCE)
         sequence.append(label)
 
+        # By design, sequences created using this function will have the
+        # start timecode of the first media_item
         timecode_tag = createElem(sequence, 'timecode')
         timecode_tag.append(rate)
         timecode_tag_string = createElem(timecode_tag, 'string', media_item.timecode)
         timecode_tag_frame = createElem(timecode_tag, 'frame', media_item.startFrame)
         timecode_tag_displayformat = createElem(timecode_tag, 'displayformat', DEFAULT_VIDEO_TIMECODE_DISPLAYFORMAT)
 
-
         media = createElem(sequence, 'media')
+
+        ## VIDEO
+        ##
         video = createElem(media, 'video')
         video_format = createElem(video, 'format')
         video_format_samplecharx = createElem(video_format, 'samplecharacteristics')
@@ -370,7 +389,7 @@ class BuildXML:
         codec_name = createElem(codec, 'name', media_item.codec_name)
         width = createElem(video_format_samplecharx, 'width', media_item.width)
         height = createElem(video_format_samplecharx, 'height', media_item.height)
-        fielddominance = createElem(video_samplecharx, 'fielddominance', media_item.fielddominance)
+        fielddominance = createElem(video_format_samplecharx, 'fielddominance', media_item.fielddominance)
         pixelaspectratio = createElem(video_format_samplecharx, 'pixelaspectratio', media_item.pixelaspectratio)
         anamorphic = createElem(video_format_samplecharx, 'anamorphic', media_item.anamorphic)
         colordepth = createElem(video_format_samplecharx, 'colordepth', DEFAULT_SEQUENCE_COLOURDEPTH)
@@ -379,17 +398,95 @@ class BuildXML:
         video_track_enabled = createElem(video_track, 'enabled', 'TRUE')
         video_track_locked = createElem(video_track, 'locked', 'FALSE')
 
-        ## AUDIO HERE
+        ## AUDIO
+        ##
+        audio = createElem(media, 'audio')
+        audio_format = createElem(audio, 'format')
+        audio_format_samplecharx = createElem(audio_format, 'samplecharacteristics')
 
+        if hasattr(media_item, 'audio_bit_depth'):
+            audio_bit_depth = media_item.audio_bit_depth
+        else:
+            audio_bit_depth = DEFAULT_AUDIO_BIT_DEPTH
+        audio_bit_depth_tag = createElem(audio_format_samplecharx, 'depth', audio_bit_depth)
 
+        if hasattr(media_item, 'audio_sample_rate'):
+            audio_sample_rate = media_item.audio_sample_rate
+        else:
+            audio_sample_rate = DEFAULT_AUDIO_SAMPLE_RATE
+        audio_sample_rate_tag = createElem(audio_format_samplecharx, 'samplerate', audio_sample_rate)
+
+        if hasattr(media_item, 'audio_channels'):
+            audio_channels = media_item.audio_channels
+        else:
+            audio_channels = DEFAULT_AUDIO_CHANNELS
+        audio_numOutputChannels = createElem(audio, 'numOutputChannels', audio_channels)
+        audio_outputs = createElem(audio, 'outputs')
+
+        # Create the audio outputs for the sequence
+        # These don't have any relation to audio clips on the timeline
+        # But basically tell Premiere during playback to output to your speakers in stereo.
+        audio_outputs_index = 0
+        for n in range(DEFAULT_SEQUENCE_AUDIO_OUTPUT_CHANNELS):
+            audio_outputs_index += 1
+            group = createElem(audio_outputs, 'group')
+            index = createElem(group, 'index', audio_outputs_index)
+            numchannels = createElem(group, 'numchannels', '1')
+            downmix = createElem(group, 'downmix', '0')
+            channel = createElem(group, 'channel')
+            channel_index = createElem(channel, 'index', audio_outputs_index)
+
+        # Function parameter to decide how many audio tracks.
+        audio_track_index = 0
+        for n in range(num_seq_audio_channels):
+            audio_track_index += 1
+            audio_track = createElem(audio, 'track')
+            # TODO: Lots of attributes here!
+            audio_track_enabled = createElem(audio_track, 'enabled', 'TRUE')
+            audio_track_locked = createElem(audio_track, 'locked', 'FALSE')
+
+            # Evenly distribute the audio tracks, even and odd
+            if audio_track_index % 2 == 0:
+                audio_outputchannelindex_n = 2
+            else:
+                audio_outputchannelindex_n = 1
+            audio_outputchannelindex = createElem(audio_track, 'outputchannelindex', audio_outputchannelindex_n)
+
+        return sequence
+
+    def xml_autoseq_video_clip(self, media_item, clip_start_at, clip_end_at):
+        clip = ET.Element('clip')
+        clip.set('id', self._increment('clipitemID'))
+        masterclipid_tag = createElem(clip, 'masterclipid', media_item.masterclipID)
+        name = createElem(clip, 'name', media_item.name)
+        enabled = createElem(clip, 'enabled', 'TRUE')
+        duration = createElem(clip, 'duration', media_item.duration)
+        rate = xml_add_framerate(media_item.frameRate)
+        alphatype = createElem(clip, 'alphatype', media_item.alphatype)
+        file = createElem(clip, 'file')
+        file.set('id', media_item.fileID)
+        label = xml_add_label(DEFAULT_LABEL_COLOUR_VIDEO)
+        clip.append(label)
+
+        # Clip timeline position is defined in the parameters
+        # Clip source TC is 0 and duration, to run the clip for its full duration
+        clip_in_at = '0'
+        clip_out_at = media_item.duration
+        # TODO: Consider how CLASHES occur and what to do to prevent
+        tag_start = createElem(clip, 'start', clip_start_at)
+        tag_end = createElem(clip, 'end', clip_end_at)
+        tag_in = createElem(clip, 'in', clip_in_at)
+        tag_out = createElem(clip, 'out', clip_out_at)
+
+        return clip
 
 
 
 
 media_items = { 'video': [], 'audio': [] }
 
-for filepath in list_of_files:
-    media_items = MediaItem(filepath)
+for filepath in TEMP_LIST_OF_FILES:
+    media_item = MediaItem(filepath)
 
     if media_item.mediaType == 'video':
         media_items['video'].append(media_item)
@@ -409,22 +506,77 @@ media_items['video'].sort()
 media_items['audio'].sort()
 
 
+
+
+##
+## BUILD XML
+##
 build = BuildXML()
 
-# To get the length, just give it all your media_items
-autosequence_length = build.xml_autosequence_duration(media_items['video'])
 
+# Create a bin for master clips
+bin_for_master_clips = build.xml_bin_create('AutoSeq_MasterClips')
+# Then create the master clips
 for media_item in media_items['video']:
-
     clip = build.xml_masterclip_video(media_item)
-    sequence = build.xml_sequence_from(media_item, autosequence_length)
+    build.xml_bin_add_item(bin_for_master_clips, clip)
 
-    # DEBUGGER
-    """
-    for child in clip:
-        print(media_item.name, child.tag, child.text)
-        ET.dump(child)
-        print(media_item.name, '^^^^^^')
-    """
+def get_autosequence_duration_startFrame(media_items):
+    # Get the combined duration of given media items, to be used in a sequence
+    # AND also get the earliest startFrame
+    # Returns a tuple.
+    #
+    # Algorithm is:
+    #       Find which is earliest, video or audio
+    #       Find which is latest, video or audio
+    #       Latest startTC + duration - Earliest startTC
+    #       == Total sequence duration
+    earliest_clip = min(media_items['video'][0], media_items['audio'][0])
+    earliest_clip_startFrame = earliest_clip.startFrame
+    latest_clip = max(media_items['video'][-1], media_items['audio'][-1])
+    latest_clip_endFrame = latest_clip.startFrame + latest_clip.duration
+    sequence_total_duration = latest_clip_endFrame - earliest_clip_startFrame
 
-    ET.dump(clip)
+    return (sequence_total_duration, earliest_clip_startFrame)
+
+# Start work on a sequence
+autosequence_duration, autosequence_startFrame = get_autosequence_duration_startFrame(media_items)
+num_seq_audio_channels = DEFAULT_SEQUENCE_AUDIO_OUTPUT_CHANNELS
+
+sequence = build.xml_sequence_from(media_item, autosequence_duration, num_seq_audio_channels)
+sequence_track_video = sequence.find('media').find('video').find('track')
+sequence_track_audio = sequence.find('media').find('audio').find('track')
+bin_for_sequence = build.xml_bin_create('AutoSeq_Sequences')
+build.xml_bin_add_item(bin_for_sequence, sequence)
+
+# Add them to the sequence
+for media_item in media_items['video']:
+    # Determine the clip's position on the timeline
+    clip_start_at = media_item.startFrame - autosequence_startFrame
+    clip_end_at = clip_start_at + media_item.duration
+    # Generate a clip
+    sequence_clip = build.xml_autoseq_video_clip(media_item, clip_start_at, clip_end_at)
+    #
+    # Add it to the video track
+    sequence_track_video.append(sequence_clip)
+
+# Define what will go into the XML document
+xmeml_document = ET.Element('xmeml')
+xmeml_document.set('version', DEFAULT_XMEML_VERSION)
+project = createElem(xmeml_document, 'project')
+project_name = createElem(project, 'name', 'AutoSeq_Project')
+project_items = createElem(project, 'children')
+# Add the bins!
+project_items.append(bin_for_master_clips)
+project_items.append(bin_for_sequence)
+
+tree = ET.ElementTree(xmeml_document)
+tree.write(TEMP_OUTPUT_XML_TO, encoding='UTF-8', xml_declaration=True)
+
+"""
+# DEBUGGER
+for child in sequence_clip:
+    print(child.tag, child.text)
+    ET.dump(child)
+    print(child.tag, '^^^^^^')
+"""

@@ -57,11 +57,3 @@ VIDEO
   alphatype
   file [ID only]
   label > label2
-
-
-
-***video track***
-  [some ID attributes]
-<clips>
-<enabled>
-<locked>

@@ -173,8 +173,12 @@ class MediaFile(object):
             # Ignore subsequent audio streams (note, this doesn't refer to channels)
             audio_stream = audio_streams[0]
             self.audio_sample_rate = int(audio_stream['sample_rate'])
-            self.audioChannels = audio_stream['channels']
-            self.audioBitDepth = audio_stream['bits_per_raw_sample']
+            self.audio_channels = audio_stream['channels']
+            self.audio_bit_depth = audio_stream['bits_per_raw_sample']
+
+        else:
+            # Otherwise, be explicit
+            self.audio_channels = 0
 
         if self.mediaType == 'audio':
             # Establish the timecode & duration, only for audio files
