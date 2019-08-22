@@ -1,0 +1,67 @@
+VIDEO
+
+***master clip***
+
+<clip> explodedTracks=true
+  masterclipID
+  duration
+  ismasterclip (boolean)
+  rate
+    timebase, ntsc
+  name
+  media
+    video
+      track
+        clipitem
+          masterclipID
+          rate - timebase, ntsc
+          alphatype
+          pixelaspectratio
+          anamorphic
+          file
+            #ID: file-ID
+            name
+            pathurl
+            rate - timebase, ntsc
+            duration
+            timecode
+              > rate - timebase, ntsc
+              > string
+              > frame
+              > displayformat
+              > reel
+            media
+              video
+                samplecharacteristics
+                  > rate - timebase, ntsc
+                  > width
+                  > height
+                  > anamorphic
+                  > pixelaspectratio
+                  > fielddominance
+  label > label2
+
+
+***clip on a track in a sequence***
+
+<clip id="clipitemID">
+  masterclipID
+  name
+  enabled (boolean)
+  duration
+  rate - timebase, ntsc
+  start
+  end
+  in
+  out
+  alphatype
+  file [ID only]
+  label > label2
+
+
+
+***video track***
+  [some ID attributes]
+<clips>
+<enabled>
+<locked>

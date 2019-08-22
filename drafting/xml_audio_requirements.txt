@@ -1,0 +1,82 @@
+AUDIO
+
+***master clip***
+
+<clip> explodedTracks=true
+  masterclipID
+  duration
+  ismasterclip (boolean)
+  rate
+    timebase, ntsc
+  name
+  media
+    audio
+      <track> --- One for each track
+        clipitem #ID
+          masterclipID
+          name
+          rate - timebase, ntsc
+          <file> #ID: file-ID
+            name
+            pathurl
+            rate - timebase, ntsc
+            duration
+            timecode
+              > rate - timebase, ntsc
+              > string
+              > frame
+              > displayformat
+              > reel
+              media
+                <audio> --- One for each channel
+                  samplecharacteristics
+                    > depth
+                    > samplerate
+                  channelcount
+                  audiochannel
+                    > sourcechannel
+                </audio>
+          sourcetrack
+            > mediatype = audio
+            > trackindex
+          link
+            > linkclipref [clipitemID]
+            > mediatype = audio
+            > trackindex
+            > clipindex
+      </track>
+  label > label2
+
+
+***clip on a track in a sequence***
+
+<clip id="clipitemID" premiereChannelType>
+  masterclipID
+  name
+  enabled (boolean)
+  duration
+  rate - timebase, ntsc
+  start
+  end
+  in
+  out
+  alphatype
+  file [ID only]
+  sourcetrack
+    > mediatype = audio
+    > trackindex
+  link
+    > linkclipref [clipitemID]
+    > mediatype = audio
+    > trackindex
+    > clipindex
+    > groupindex
+  label > label2
+
+
+
+***video track***
+  [some ID attributes]
+<clips>
+<enabled>
+<locked>

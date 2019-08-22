@@ -151,8 +151,25 @@ pr_xml_video_masterclip = """
                             <ntsc>FALSE</ntsc>
                         </rate>
                         <media>
-                            <video />
-                            <audio />
+                            <video>
+                                <samplecharacteristics>
+                                    <rate>
+                                        <timebase />
+                                        <ntsc>FALSE</ntsc>
+                                    </rate>
+                                    <width />
+                                    <height />
+                                    <pixelaspectratio />
+                                    <fielddominance />
+                                </samplecharacteristics>
+                            </video>
+                            <audio>
+                                <samplecharacteristics>
+                                    <depth />
+                                    <samplerate />
+                                </samplecharacteristics>
+                                <channelcount />
+                            </audio>
                         </media>
                     </file>
                 </clipitem>
@@ -170,6 +187,98 @@ pr_xml_video_masterclip = """
     </labels>
 </clip>
 """
+
+pr_xml_audio_masterclip = """
+<clip explodedTracks="true">
+    <masterclipid />
+    <ismasterclip>TRUE</ismasterclip>
+    <duration />
+    <rate>
+        <timebase />
+        <ntsc>FALSE</ntsc>
+    </rate>
+    <in />
+    <out />
+    <name />
+    <media>
+        <audio>
+            <track>
+
+            </track>
+        </audio>
+    </media>
+	<logginginfo>
+        <description />
+        <scene />
+        <shottake />
+        <lognote />
+    </logginginfo>
+    <labels>
+        <label2>Iris</label2>
+    </labels>
+</clip>
+"""
+
+pr_xml_audio_masterclip_clipitem = """
+                <clipitem>
+                    <masterclipid />
+                    <name />
+                    <rate>
+                        <timebase />
+                        <ntsc>FALSE</ntsc>
+                    </rate>
+                    <file>
+                        <name />
+                        <pathurl />
+                        <rate>
+                            <timebase />
+                            <ntsc>FALSE</ntsc>
+                        </rate>
+                        <duration />
+                        <timecode>
+                            <rate>
+                                <timebase />
+                                <ntsc>TRUE</ntsc>
+                            </rate>
+                            <string />
+                            <frame />
+                            <displayformat />
+                            <reel>
+                                <name />
+                            </reel>
+                        </timecode>
+                        <media>
+                            <audio>
+                                <samplecharacteristics>
+                                    <depth />
+                                    <samplerate />
+                                </samplecharacteristics>
+                                <channelcount />
+                                <audiochannel>
+                                    <sourcechannel>1</sourcechannel>
+                                </audiochannel>
+                            </audio>
+                        </media>
+                    </file>
+                    <sourcetrack>
+                        <mediatype>audio</mediatype>
+                        <trackindex />
+                    </sourcetrack>
+                </clipitem>
+"""
+
+pr_xml_audio_clip_channel = """
+                            <audio>
+                                <samplecharacteristics>
+                                    <depth />
+                                    <samplerate />
+                                </samplecharacteristics>
+                                <channelcount />
+                                <audiochannel>
+                                    <sourcechannel>1</sourcechannel>
+                                </audiochannel>
+                            </audio>
+                            """
 
 pr_xml_video_clip_on_timeline = """
 <clipitem>

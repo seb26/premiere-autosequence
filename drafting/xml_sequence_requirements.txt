@@ -1,0 +1,58 @@
+*** sequence ***
+<sequence> ID=sequence-id
+[LARGE NUMBER OF ATTRIBUTES]
+
+  duration
+  rate - timebase, ntsc
+  name
+  media
+
+    <video>
+      format
+        samplecharacteristics
+          rate - timebase, ntsc
+          codec
+            name
+            appspecificdata
+          width
+          height
+          anamorphic
+          pixelaspectratio
+          fielddominance
+          colordepth
+      track [ATTRIBUTES: TrackTargeted=1]
+        clipitems (ID=clipitem-ID) (identifies itself)
+        ...
+        ...
+        enabled
+        locked
+
+    <audio>
+      numOutputChannels
+      format
+        samplecharacteristics
+          depth
+          samplerate
+      outputs
+        group         [usually two of these]
+          index
+          numchannels
+          downmix
+          channel
+            index
+      track
+        [ATTRIBUTES: exploded track, premiereTrackType, ...]
+        clipitem (ID=clipitem-ID) premiereChannelType
+        ...
+        ...
+        ...
+        enabled
+        locked
+        outputchannelindex (1, 2, 3...)
+
+  <timecode>
+    rate - timebase, ntsc
+    string
+    frame
+    displayformat
+  labels > label2
