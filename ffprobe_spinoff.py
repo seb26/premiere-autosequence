@@ -260,12 +260,12 @@ class BuildXML:
 
         # Collect a centralised ID space
         self.index = {}
-        for count in [ 'masterclipID', 'clipitemID', 'fileID', 'sequenceID', 'autoseqID' ]:
+        for count in [ 'masterclip', 'clipitem', 'file', 'sequence', 'autoseq' ]:
             # Set all IDs to 0 to start with
             # First time they get used, they will be incremented to 1
             self.index[count] = 0
 
-    def _increment(self, indexType):
+    def _incrementID(self, indexType):
         self.index[indexType] += 1
         return indexType + '-' + str(self.index[indexType])
 
@@ -297,7 +297,7 @@ class BuildXML:
         # Increment the masterclipID, and assign it back to the [media_item]
         # Add it to the id="" attribute
         # And describe it in text as <masterclipid>
-        media_item.masterclipID = self._increment('masterclipID')
+        media_item.masterclipID = self._incrementID('masterclip')
         clip.set('id', media_item.masterclipID )
         masterclipid_tag = createElem(clip, 'masterclipid', media_item.masterclipID)
         clip.set('explodedTracks', 'true')
@@ -316,7 +316,7 @@ class BuildXML:
         # Unlike masterclipID, clipitemID is never referenced outside of the masterclip
         # They are essentially single use
         # For every audio clip inside a master clip, please increment a new ID
-        clipitem.set('id', self._increment('clipitemID'))
+        clipitem.set('id', self._incrementID('clipitem'))
 
         clipitem.append(masterclipid_tag)
         clipitem.append(rate)
@@ -327,7 +327,7 @@ class BuildXML:
         file_tag = createElem(clipitem, 'file')
         # Increment the fileID, and assign it back to the [media_item]
         # Add it to the id="" attribute
-        media_item.fileID = self._increment('fileID')
+        media_item.fileID = self._incrementID('file')
         file_tag.set('id', media_item.fileID )
 
         file_tag.append(name)
@@ -355,12 +355,14 @@ class BuildXML:
 
     def xml_sequence_from(self, media_item, sequence_length, num_seq_audio_channels):
         sequence = ET.Element('sequence')
-        sequenceID = self._increment('sequenceID')
+        sequenceID = self._incrementID('sequence')
         sequence.set('id', sequenceID )
-        # Other sequence attributes here!
+        # Set some important attributes
+        for k, v in preset_xml_default_sequence_attributes.items():
+            sequence.set(k, v)
 
         duration = createElem(sequence, 'duration', str(sequence_length))
-        name = createElem(sequence, 'name', self._increment('autoseqID'))
+        name = createElem(sequence, 'name', self._incrementID('autoseq'))
 
         # Now, begin to establish the format of the sequence
         # Take as many attributes as possible from the media_item we were given
@@ -397,6 +399,9 @@ class BuildXML:
         video_track = createElem(video, 'track')
         video_track_enabled = createElem(video_track, 'enabled', 'TRUE')
         video_track_locked = createElem(video_track, 'locked', 'FALSE')
+        # Set attributes
+        for k, v in preset_xml_default_sequence_video_track_attributes.items():
+            video_track.set(k, v)
 
         ## AUDIO
         ##
@@ -416,11 +421,7 @@ class BuildXML:
             audio_sample_rate = DEFAULT_AUDIO_SAMPLE_RATE
         audio_sample_rate_tag = createElem(audio_format_samplecharx, 'samplerate', audio_sample_rate)
 
-        if hasattr(media_item, 'audio_channels'):
-            audio_channels = media_item.audio_channels
-        else:
-            audio_channels = DEFAULT_AUDIO_CHANNELS
-        audio_numOutputChannels = createElem(audio, 'numOutputChannels', audio_channels)
+        audio_numOutputChannels = createElem(audio, 'numOutputChannels', DEFAULT_SEQUENCE_AUDIO_OUTPUT_CHANNELS)
         audio_outputs = createElem(audio, 'outputs')
 
         # Create the audio outputs for the sequence
@@ -444,6 +445,9 @@ class BuildXML:
             # TODO: Lots of attributes here!
             audio_track_enabled = createElem(audio_track, 'enabled', 'TRUE')
             audio_track_locked = createElem(audio_track, 'locked', 'FALSE')
+            # Set attributes
+            for k, v in preset_xml_default_sequence_audio_track_attributes.items():
+                audio_track.set(k, v)
 
             # Evenly distribute the audio tracks, even and odd
             if audio_track_index % 2 == 0:
@@ -454,31 +458,31 @@ class BuildXML:
 
         return sequence
 
-    def xml_autoseq_video_clip(self, media_item, clip_start_at, clip_end_at):
-        clip = ET.Element('clip')
-        clip.set('id', self._increment('clipitemID'))
-        masterclipid_tag = createElem(clip, 'masterclipid', media_item.masterclipID)
-        name = createElem(clip, 'name', media_item.name)
-        enabled = createElem(clip, 'enabled', 'TRUE')
-        duration = createElem(clip, 'duration', media_item.duration)
+    def xml_autoseq_video_clip(self, media_item, clipitem_start_at, clipitem_end_at):
+        clipitem = ET.Element('clipitem')
+        clipitem.set('id', self._incrementID('clipitem'))
+        masterclipid_tag = createElem(clipitem, 'masterclipid', media_item.masterclipID)
+        name = createElem(clipitem, 'name', media_item.name)
+        enabled = createElem(clipitem, 'enabled', 'TRUE')
+        duration = createElem(clipitem, 'duration', media_item.duration)
         rate = xml_add_framerate(media_item.frameRate)
-        alphatype = createElem(clip, 'alphatype', media_item.alphatype)
-        file = createElem(clip, 'file')
+        alphatype = createElem(clipitem, 'alphatype', media_item.alphatype)
+        file = createElem(clipitem, 'file')
         file.set('id', media_item.fileID)
         label = xml_add_label(DEFAULT_LABEL_COLOUR_VIDEO)
-        clip.append(label)
+        clipitem.append(label)
 
         # Clip timeline position is defined in the parameters
         # Clip source TC is 0 and duration, to run the clip for its full duration
-        clip_in_at = '0'
-        clip_out_at = media_item.duration
+        clipitem_in_at = '0'
+        clipitem_out_at = media_item.duration
         # TODO: Consider how CLASHES occur and what to do to prevent
-        tag_start = createElem(clip, 'start', clip_start_at)
-        tag_end = createElem(clip, 'end', clip_end_at)
-        tag_in = createElem(clip, 'in', clip_in_at)
-        tag_out = createElem(clip, 'out', clip_out_at)
+        tag_start = createElem(clipitem, 'start', clipitem_start_at)
+        tag_end = createElem(clipitem, 'end', clipitem_end_at)
+        tag_in = createElem(clipitem, 'in', clipitem_in_at)
+        tag_out = createElem(clipitem, 'out', clipitem_out_at)
 
-        return clip
+        return clipitem
 
 
 
@@ -552,10 +556,10 @@ build.xml_bin_add_item(bin_for_sequence, sequence)
 # Add them to the sequence
 for media_item in media_items['video']:
     # Determine the clip's position on the timeline
-    clip_start_at = media_item.startFrame - autosequence_startFrame
-    clip_end_at = clip_start_at + media_item.duration
+    clipitem_start_at = media_item.startFrame - autosequence_startFrame
+    clipitem_end_at = clipitem_start_at + media_item.duration
     # Generate a clip
-    sequence_clip = build.xml_autoseq_video_clip(media_item, clip_start_at, clip_end_at)
+    sequence_clip = build.xml_autoseq_video_clip(media_item, clipitem_start_at, clipitem_end_at)
     #
     # Add it to the video track
     sequence_track_video.append(sequence_clip)

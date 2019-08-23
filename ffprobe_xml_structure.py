@@ -5,12 +5,12 @@ preset_xml_default_sequence_attributes = {
     "TL.SQAVDividerPosition": "0.5",
     "TL.SQHideShyTracks": "0",
     "TL.SQHeaderWidth": "236",
-    "Monitor.ProgramZoomOut": "365386775040000",
+    "Monitor.ProgramZoomOut": "1923967987200000",
     "Monitor.ProgramZoomIn": "0",
-    "TL.SQTimePerPixel": "2.2205228758169935",
-    "MZ.EditLine": "359280230400000",
+    "TL.SQTimePerPixel": "5.8178647023939369",
+    "MZ.EditLine": "1897723054080000",
     "MZ.Sequence.PreviewFrameSizeHeight": "1080",
-    "MZ.Sequence.PreviewFrameSizeWidth": "1920",
+    "MZ.Sequence.PreviewFrameSizeWidth": "1678",
     "MZ.Sequence.AudioTimeDisplayFormat": "200",
     "MZ.Sequence.PreviewRenderingClassID": "1297106761",
     "MZ.Sequence.PreviewRenderingPresetCodec": "1297107278",
@@ -21,7 +21,7 @@ preset_xml_default_sequence_attributes = {
     "MZ.Sequence.VideoTimeDisplayFormat": "101",
     "MZ.WorkOutPoint": "72272632320000",
     "MZ.WorkInPoint": "0",
-    "MZ.ZeroPoint": "11281612608000000",
+    "MZ.ZeroPoint": "10601662579200000",
     "explodedTracks": "true",
 }
 
@@ -42,5 +42,5 @@ preset_xml_default_sequence_audio_track_attributes = {
     "PannerStartKeyframe": "-91445760000000000,0.5,0,0,0,0,0,0", "PannerName": "Balance",
     "currentExplodedTrackIndex": "0",
     "totalExplodedTrackCount": "1",
-    "premiereTrackType": "Mono",
+    "premiereTrackType": "Stereo",
 }

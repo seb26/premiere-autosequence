@@ -10,9 +10,9 @@
 					<label2>Mango</label2>
 				</labels>
 				<children>
-					<clip id="masterclip-1" explodedTracks="true">
-						<uuid>d2dba443-11fc-4a07-a02a-d73fcce01e2a</uuid>
-						<masterclipid>masterclip-1</masterclipid>
+					<clip id="masterclip-3" explodedTracks="true">
+						<uuid>2eff5cce-8e48-40a4-b61d-b93243a196d6</uuid>
+						<masterclipid>masterclip-3</masterclipid>
 						<ismasterclip>TRUE</ismasterclip>
 						<duration>1690</duration>
 						<rate>
@@ -23,8 +23,8 @@
 						<media>
 							<video>
 								<track>
-									<clipitem id="clipitem-1">
-										<masterclipid>masterclip-1</masterclipid>
+									<clipitem id="clipitem-4">
+										<masterclipid>masterclip-3</masterclipid>
 										<name>T001C010_190511_R6XC.[1043405-1045094]</name>
 										<rate>
 											<timebase>25</timebase>
@@ -33,7 +33,7 @@
 										<alphatype>none</alphatype>
 										<pixelaspectratio>square</pixelaspectratio>
 										<anamorphic>FALSE</anamorphic>
-										<file id="file-1">
+										<file id="file-3">
 											<name>T001C010_190511_R6XC.[1043405-1045094].mov</name>
 											<pathurl>file://localhost/Q%3a/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/T001C010_190511_R6XC.[1043405-1045094].mov</pathurl>
 											<rate>
@@ -90,9 +90,9 @@
 							<label2>Iris</label2>
 						</labels>
 					</clip>
-					<clip id="masterclip-2" explodedTracks="true">
-						<uuid>d0d8404c-2a39-4955-bb28-c5ff8358c177</uuid>
-						<masterclipid>masterclip-2</masterclipid>
+					<clip id="masterclip-4" explodedTracks="true">
+						<uuid>8efb0f0e-3ea6-438e-b74f-08ec99114c40</uuid>
+						<masterclipid>masterclip-4</masterclipid>
 						<ismasterclip>TRUE</ismasterclip>
 						<duration>2583</duration>
 						<rate>
@@ -103,8 +103,8 @@
 						<media>
 							<video>
 								<track>
-									<clipitem id="clipitem-2">
-										<masterclipid>masterclip-2</masterclipid>
+									<clipitem id="clipitem-5">
+										<masterclipid>masterclip-4</masterclipid>
 										<name>A002C001_190511_R6XC.[1230177-1232759]</name>
 										<rate>
 											<timebase>25</timebase>
@@ -113,7 +113,7 @@
 										<alphatype>none</alphatype>
 										<pixelaspectratio>square</pixelaspectratio>
 										<anamorphic>FALSE</anamorphic>
-										<file id="file-2">
+										<file id="file-4">
 											<name>A002C001_190511_R6XC.[1230177-1232759].mov</name>
 											<pathurl>file://localhost/Q%3a/Projects/PRODIGAL_SON/MEDIA_TRANS/190511_D01/A002C001_190511_R6XC.[1230177-1232759].mov</pathurl>
 											<rate>
@@ -192,9 +192,9 @@
 					<label2>Mango</label2>
 				</labels>
 				<children>
-					<sequence id="sequence-1" TL.SQAudioVisibleBase="0" TL.SQVideoVisibleBase="0" TL.SQVisibleBaseTime="0" TL.SQAVDividerPosition="0.5" TL.SQHideShyTracks="0" TL.SQHeaderWidth="236" Monitor.ProgramZoomOut="26244933120000" Monitor.ProgramZoomIn="0" TL.SQTimePerPixel="0.76614379084967321" MZ.EditLine="178654533120000" MZ.Sequence.PreviewFrameSizeHeight="1080" MZ.Sequence.PreviewFrameSizeWidth="1678" MZ.Sequence.AudioTimeDisplayFormat="200" MZ.Sequence.PreviewRenderingClassID="1061109567" MZ.Sequence.PreviewRenderingPresetCodec="1919706400" MZ.Sequence.PreviewRenderingPresetPath="EncoderPresets\SequencePreview\9678af98-a7b7-4bdb-b477-7ac9c8df4a4e\QuickTime.epr" MZ.Sequence.PreviewUseMaxBitDepth="false" MZ.Sequence.EditingModeGUID="9678af98-a7b7-4bdb-b477-7ac9c8df4a4e" MZ.Sequence.VideoTimeDisplayFormat="101" MZ.ZeroPoint="12499385633280000" explodedTracks="true">
-						<uuid>87a8428b-15da-43d6-9ecf-6b4c33d652e4</uuid>
-						<duration>2583</duration>
+					<sequence id="sequence-2" TL.SQAudioVisibleBase="0" TL.SQVideoVisibleBase="0" TL.SQVisibleBaseTime="0" TL.SQAVDividerPosition="0.5" TL.SQHideShyTracks="0" TL.SQHeaderWidth="236" Monitor.ProgramZoomOut="1923967987200000" Monitor.ProgramZoomIn="0" TL.SQTimePerPixel="5.8178647023939369" MZ.EditLine="1897723054080000" MZ.Sequence.PreviewFrameSizeHeight="1080" MZ.Sequence.PreviewFrameSizeWidth="1678" MZ.Sequence.AudioTimeDisplayFormat="200" MZ.Sequence.PreviewRenderingClassID="1297106761" MZ.Sequence.PreviewRenderingPresetCodec="1297107278" MZ.Sequence.PreviewRenderingPresetPath="EncoderPresets\SequencePreview\d8484cf3-c96c-4622-ab1f-ac1a16e196f9\I-Frame Only MPEG.epr" MZ.Sequence.PreviewUseMaxRenderQuality="false" MZ.Sequence.PreviewUseMaxBitDepth="false" MZ.Sequence.EditingModeGUID="d8484cf3-c96c-4622-ab1f-ac1a16e196f9" MZ.Sequence.VideoTimeDisplayFormat="101" MZ.WorkOutPoint="72272632320000" MZ.WorkInPoint="0" MZ.ZeroPoint="10601662579200000" explodedTracks="true">
+						<uuid>6deaa63e-be5a-4a49-a765-0ddb897a2824</uuid>
+						<duration>189355</duration>
 						<rate>
 							<timebase>25</timebase>
 							<ntsc>FALSE</ntsc>
@@ -237,8 +237,45 @@
 									</samplecharacteristics>
 								</format>
 								<track TL.SQTrackShy="0" TL.SQTrackExpandedHeight="25" TL.SQTrackExpanded="0" MZ.TrackTargeted="1">
-									<clipitem id="clipitem-3">
-										<masterclipid>masterclip-2</masterclipid>
+									<clipitem id="clipitem-6">
+										<masterclipid>masterclip-3</masterclipid>
+										<name>T001C010_190511_R6XC.[1043405-1045094]</name>
+										<enabled>TRUE</enabled>
+										<duration>1690</duration>
+										<rate>
+											<timebase>25</timebase>
+											<ntsc>FALSE</ntsc>
+										</rate>
+										<start>0</start>
+										<end>1690</end>
+										<in>0</in>
+										<out>1690</out>
+										<pproTicksIn>0</pproTicksIn>
+										<pproTicksOut>17171481600000</pproTicksOut>
+										<alphatype>none</alphatype>
+										<file id="file-3"/>
+										<logginginfo>
+											<description></description>
+											<scene></scene>
+											<shottake></shottake>
+											<lognote></lognote>
+											<good></good>
+											<originalvideofilename></originalvideofilename>
+											<originalaudiofilename></originalaudiofilename>
+										</logginginfo>
+										<colorinfo>
+											<lut></lut>
+											<lut1></lut1>
+											<asc_sop></asc_sop>
+											<asc_sat></asc_sat>
+											<lut2></lut2>
+										</colorinfo>
+										<labels>
+											<label2>Iris</label2>
+										</labels>
+									</clipitem>
+									<clipitem id="clipitem-7">
+										<masterclipid>masterclip-4</masterclipid>
 										<name>A002C001_190511_R6XC.[1230177-1232759]</name>
 										<enabled>TRUE</enabled>
 										<duration>2583</duration>
@@ -246,14 +283,14 @@
 											<timebase>25</timebase>
 											<ntsc>FALSE</ntsc>
 										</rate>
-										<start>0</start>
-										<end>2583</end>
+										<start>186772</start>
+										<end>189355</end>
 										<in>0</in>
 										<out>2583</out>
 										<pproTicksIn>0</pproTicksIn>
 										<pproTicksOut>26244933120000</pproTicksOut>
 										<alphatype>none</alphatype>
-										<file id="file-2"/>
+										<file id="file-4"/>
 											<marker>
 												<comment></comment>
 												<name></name>
@@ -328,12 +365,12 @@
 									<locked>FALSE</locked>
 									<outputchannelindex>2</outputchannelindex>
 								</track>
-								<track TL.SQTrackAudioKeyframeStyle="0" TL.SQTrackShy="0" TL.SQTrackExpandedHeight="25" TL.SQTrackExpanded="0" MZ.TrackTargeted="0" PannerCurrentValue="0.5" PannerStartKeyframe="-91445760000000000,0.5,0,0,0,0,0,0" PannerName="Balance" currentExplodedTrackIndex="0" totalExplodedTrackCount="2" premiereTrackType="Stereo">
+								<track TL.SQTrackAudioKeyframeStyle="0" TL.SQTrackShy="0" TL.SQTrackExpandedHeight="25" TL.SQTrackExpanded="0" MZ.TrackTargeted="1" PannerCurrentValue="0.5" PannerStartKeyframe="-91445760000000000,0.5,0,0,0,0,0,0" PannerName="Balance" currentExplodedTrackIndex="0" totalExplodedTrackCount="2" premiereTrackType="Stereo">
 									<enabled>TRUE</enabled>
 									<locked>FALSE</locked>
 									<outputchannelindex>1</outputchannelindex>
 								</track>
-								<track TL.SQTrackAudioKeyframeStyle="0" TL.SQTrackShy="0" TL.SQTrackExpandedHeight="25" TL.SQTrackExpanded="0" MZ.TrackTargeted="0" PannerCurrentValue="0.5" PannerStartKeyframe="-91445760000000000,0.5,0,0,0,0,0,0" PannerName="Balance" currentExplodedTrackIndex="1" totalExplodedTrackCount="2" premiereTrackType="Stereo">
+								<track TL.SQTrackAudioKeyframeStyle="0" TL.SQTrackShy="0" TL.SQTrackExpandedHeight="25" TL.SQTrackExpanded="0" MZ.TrackTargeted="1" PannerCurrentValue="0.5" PannerStartKeyframe="-91445760000000000,0.5,0,0,0,0,0,0" PannerName="Balance" currentExplodedTrackIndex="1" totalExplodedTrackCount="2" premiereTrackType="Stereo">
 									<enabled>TRUE</enabled>
 									<locked>FALSE</locked>
 									<outputchannelindex>2</outputchannelindex>
@@ -345,8 +382,8 @@
 								<timebase>25</timebase>
 								<ntsc>FALSE</ntsc>
 							</rate>
-							<string>13:40:07:02</string>
-							<frame>1230177</frame>
+							<string>11:35:36:05</string>
+							<frame>1043405</frame>
 							<displayformat>NDF</displayformat>
 						</timecode>
 						<labels>
