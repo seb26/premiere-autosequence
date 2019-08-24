@@ -4,79 +4,56 @@ AUDIO
 
 <clip> explodedTracks=true
   masterclipID
-  duration
   ismasterclip (boolean)
+  name
+  duration
   rate
     timebase, ntsc
-  name
-  media
-    audio
-      <track> --- One for each track
-        clipitem #ID
-          masterclipID
-          name
-          rate - timebase, ntsc
-          <file> #ID: file-ID
-            name
-            pathurl
-            rate - timebase, ntsc
-            duration
-            timecode
-              > rate - timebase, ntsc
-              > string
-              > frame
-              > displayformat
-              > reel
-              media
-                <audio> --- One for each channel
-                  samplecharacteristics
-                    > depth
-                    > samplerate
-                  channelcount
-                  audiochannel
-                    > sourcechannel
-                </audio>
-          sourcetrack
-            > mediatype = audio
-            > trackindex
-          link
-            > linkclipref [clipitemID]
-            > mediatype = audio
-            > trackindex
-            > clipindex
-      </track>
-  label > label2
-
-
-***clip on a track in a sequence***
-
-<clip id="clipitemID" premiereChannelType>
-  masterclipID
-  name
-  enabled (boolean)
-  duration
-  rate - timebase, ntsc
-  start
-  end
   in
   out
-  alphatype
-  file [ID only]
-  sourcetrack
-    > mediatype = audio
-    > trackindex
-  link
-    > linkclipref [clipitemID]
-    > mediatype = audio
-    > trackindex
-    > clipindex
-    > groupindex
+  media
+    audio
+      track
+        clipitem #id
+          masterclipid
+          name
+          rate
+          file #id
+            name
+            pathurl
+            rate
+            media
+              audio
+                channelcount 1
+                audiochannel
+                  sourcechannel 1
+              audio
+                channelcount 1
+                audiochannel
+                  sourcechannel 2
+              ...
   label > label2
+  media
 
 
 
-***video track***
-  [some ID attributes]
-<clips>
-<enabled>
-<locked>
+***audio clip on a track in a sequence***
+
+audio
+  track
+    ONE CLIP ITEM PER CHANNEL
+    <clipitem id="clipitemID" premiereChannelType=MONO>
+      masterclipID
+      name
+      label > label2
+      enabled (boolean)
+      duration
+      rate - timebase, ntsc
+      start
+      end
+      in
+      out
+      file [ID only]
+      sourcetrack
+        > mediatype = audio
+        > trackindex (# TRACK INDEX) HERE

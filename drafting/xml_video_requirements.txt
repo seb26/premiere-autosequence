@@ -24,27 +24,15 @@ VIDEO
             pathurl
             rate - timebase, ntsc
             duration
-            timecode
-              > rate - timebase, ntsc
-              > string
-              > frame
-              > displayformat
-              > reel
             media
               video
-                samplecharacteristics
-                  > rate - timebase, ntsc
-                  > width
-                  > height
-                  > anamorphic
-                  > pixelaspectratio
-                  > fielddominance
+              audio
   label > label2
 
 
 ***clip on a track in a sequence***
 
-<clip id="clipitemID">
+<clipitem id="clipitemID">
   masterclipID
   name
   enabled (boolean)
