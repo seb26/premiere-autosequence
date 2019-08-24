@@ -417,11 +417,12 @@ class BuildAutosequence:
         # If there are video clips, but no audio
 
         # DEBUG
+        """
         print(media_items)
         for k in media_items.keys():
             for item in media_items[k]:
                 print(item, item.name, item.startFrame, item.timecode)
-
+        """
         if len(media_items['video']) > 0 and len(media_items['audio']) == 0:
             search_items = media_items['video']
         # If there are audio clips, but no video
@@ -441,7 +442,7 @@ class BuildAutosequence:
         #       Latest startTC + duration - Earliest startTC
         #       == Total sequence duration
         earliest_clip = search_items[0]
-        print('earliest', earliest_clip.name, earliest_clip.startFrame, earliest_clip.timecode)
+        # DEBUG: print('earliest', earliest_clip.name, earliest_clip.startFrame, earliest_clip.timecode)
         earliest_clip_startFrame = earliest_clip.startFrame
         latest_clip = search_items[-1]
         latest_clip_endFrame = latest_clip.startFrame + latest_clip.duration
