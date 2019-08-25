@@ -257,19 +257,17 @@ class MasterClips:
         # Create a <clip> Element for a Masterclip
         # Give it a MasterclipID and save this back to the item
         # Add all relevant metadata
-        # Add video-specific and audio-specific metadata
-        # Store them temporarily as self._master_clips
+        # Add video-specific metadata
+        # For every audio channel (regardless of Video or Audio clip), create appropriate tracks
+
+        # Store the master clip as a list under self._master_clips
         """
 
         self._master_clips = []
 
         for media_item in media_items:
-
             clip = ET.Element('clip')
             clip.set('explodedTracks', 'true')
-            duration = createElem(clip, 'duration', media_item.duration)
-            ismasterclip = createElem(clip, 'ismasterclip', 'TRUE')
-            name = createElem(clip, 'name', media_item.name)
 
             # Increment the masterclipID, and assign it back to the [media_item]
             # Add it to the id="" attribute
@@ -278,89 +276,110 @@ class MasterClips:
             clip.set('id', media_item.masterclipID )
             masterclipid_tag = createElem(clip, 'masterclipid', media_item.masterclipID)
 
+            # Other initial attributes
+            duration = createElem(clip, 'duration', media_item.duration)
+            ismasterclip = createElem(clip, 'ismasterclip', 'TRUE')
+            name = createElem(clip, 'name', media_item.name)
             rate = xml_add_framerate(media_item.frameRate)
             clip.append(rate)
 
-            media = createElem(clip, 'media')
+            tag_media = createElem(clip, 'media')
 
-            ##
-            ## VIDEO VERSUS AUDIO
+            """
+            # VIDEO CLIP-SPECIFIC
+            """
             if media_item.mediaType == 'video':
+                tag_video = createElem(tag_media, 'video')
+                tag_video_track = createElem(tag_video, 'track')
+                video_clipitem = createElem(tag_video_track, 'clipitem')
+                video_clipitem.set('id', project.incrementID('clipitem'))
 
+                video_clipitem.append(masterclipid_tag)
+                video_clipitem.append(name)
+                video_clipitem.append(rate)
+                # Quickly bash out elements for these three attributes
+                for attrib in [ 'alphatype', 'pixelaspectratio', 'anamorphic' ]:
+                    createElem(video_clipitem, attrib, getattr(media_item, attrib))
 
-                media_video = createElem(media, 'video')
-                media_video_track = createElem(media_video, 'track')
-
-                clipitem = createElem(media_video_track, 'clipitem')
-                # Unlike masterclipID, clipitemID is never referenced outside of the masterclip
-                # They are essentially single use
-                # For every audio clip inside a master clip, please increment a new ID
-                clipitem.set('id', project.incrementID('clipitem'))
-                clipitem.append(masterclipid_tag)
-                clipitem.append(rate)
-                alphatype = createElem(clipitem, 'alphatype', media_item.alphatype)
-                pixelaspectratio = createElem(clipitem, 'pixelaspectratio', media_item.pixelaspectratio)
-                anamorphic = createElem(clipitem, 'anamorphic', media_item.anamorphic)
-
-                file_tag = createElem(clipitem, 'file')
-                # Increment the fileID, and assign it back to the [media_item]
-                # Add it to the id="" attribute
+                # Define the <file> entry
+                video_clipitem_file = createElem(video_clipitem, 'file')
                 media_item.fileID = project.incrementID('file')
-                file_tag.set('id', media_item.fileID )
+                video_clipitem_file.set('id', media_item.fileID)
+                video_clipitem_file.append(name)
+                video_clipitem_file.append(rate)
+                video_clipitem_file.append(duration)
+                video_clipitem_file_pathurl = createElem(video_clipitem_file, 'pathurl', media_item.pathurl)
 
-                file_tag.append(name)
-                file_tag.append(rate)
-                file_tag.append(duration)
-                pathurl = createElem(file_tag, 'pathurl', media_item.pathurl)
+                # Create these but leave them empty
+                video_clipitem_file_media = createElem(video_clipitem_file, 'media')
+                video_clipitem_file_media_video = createElem(video_clipitem_file_media, 'video')
 
-                # Create the <media><video> tags
-                # But, leave them empty
-                file_tag_media = createElem(file_tag, 'media')
-                file_tag_media_video = createElem(file_tag_media, 'video')
-                file_tag_media_audio = createElem(file_tag_media, 'audio')
-                file_tag_media_audio2 = createElem(file_tag_media, 'audio')
+                # If there is embedded camera audio...
+                if media_item.audio_channels > 0:
+                    video_clipitem_file_media_audio = createElem(video_clipitem_file_media, 'audio')
+                    tag_channelcount = createElem(video_clipitem_file_media_audio, 'channelcount', media_item.audio_channels)
+
+                # Also create <audio><track>s
+                tag_audio = createElem(tag_media, 'audio')
+
+                n_index_audio_channel = 0
+                for n in range(media_item.audio_channels):
+                    n_index_audio_channel += 1
+                    tag_audio_track = createElem(tag_audio, 'track')
+                    tag_audio_track.set('id', project.incrementID('clipitem'))
+                    tag_audio_track.append(masterclipid_tag)
+                    tag_audio_track.append(name)
+                    tag_audio_track.append(rate)
+                    tag_audio_track_file = createElem(tag_audio_track, 'file')
+                    tag_audio_track_file.set('id', media_item.fileID)
+
+                    tag_audio_track_sourcetrack = createElem(tag_audio_track, 'sourcetrack')
+                    tag_audio_track_sourcetrack_mediatype = createElem(tag_audio_track_sourcetrack, 'mediatype', 'audio')
+                    tag_audio_track_sourcetrack_trackindex = createElem(tag_audio_track_sourcetrack, 'trackindex', n_index_audio_channel)
+
+
 
             elif media_item.mediaType == 'audio':
+                tag_audio = createElem(tag_media, 'audio')
 
-
-                media_audio = createElem(media, 'audio')
-                media_audio_track = createElem(media_audio, 'track')
-
-                clipitem = createElem(media_audio_track, 'clipitem')
-                clipitem.set('id', project.incrementID('clipitem'))
-                clipitem.append(masterclipid_tag)
-                clipitem.append(rate)
-
-                file_tag = createElem(clipitem, 'file')
+                # Pre-create the <file> item
+                # Soon, it will be attached to the very first track of audio
+                audio_track_clipitem_file = ET.Element('file')
                 media_item.fileID = project.incrementID('file')
-                file_tag.set('id', media_item.fileID )
+                audio_track_clipitem_file.set('id', media_item.fileID)
+                audio_track_clipitem_file_pathurl = createElem(audio_track_clipitem_file, 'pathurl', media_item.pathurl)
+                audio_track_clipitem_file.append(name)
+                audio_track_clipitem_file.append(rate)
+                audio_track_clipitem_file.append(duration)
+                audio_track_clipitem_file_media = createElem(audio_track_clipitem_file, 'media')
 
-                file_tag.append(name)
-                file_tag.append(rate)
-                pathurl = createElem(file_tag, 'pathurl', media_item.pathurl)
+                for n in range(media_item.audio_channels):
+                    audio_track_clipitem_file_media_audio = createElem(audio_track_clipitem_file_media, 'audio')
+                    audio_track_clipitem_file_media_audio_channelcount = createElem(audio_track_clipitem_file_media_audio, 'channelcount', '1') # Mono assumption!
+                    audio_track_clipitem_file_media_audio_audiochannel = createElem(audio_track_clipitem_file_media_audio, 'audiochannel')
+                    audio_track_clipitem_file_media_audio_audiochannel_sourcechannel = createElem(audio_track_clipitem_file_media_audio_audiochannel, 'sourcechannel', n + 1)
 
-                file_tag_media = createElem(file_tag, 'media')
+                # Apply the following steps FOR EACH CHANNEL OF AUDIO
+                for n in range(media_item.audio_channels):
+                    audio_track = createElem(tag_audio, 'track')
+                    audio_track_clipitem = createElem(audio_track, 'clipitem')
+                    audio_track_clipitem.set('id', project.incrementID('clipitem'))
+                    audio_track_clipitem.append(masterclipid_tag)
+                    audio_track_clipitem.append(name)
+                    audio_track_clipitem.append(rate)
 
-            """
-            # Create an <audio> tag inside <media> for every single audio channel
-            # Applies for both video and audio master clips.
-            # THIS SECTION
-            # MAKES A GIANT ASSUMPTION THAT ALL CHANNELS 1:1 EQUAL TRACKS
-            # I.E. EVERYTHING IS MONO AND SINGULAR AND STEREO DOESN'T EXIST
-            for n in range(media_item.audio_channels):
-                n_channel_index = n + 1
+                    if n == 0:
+                        # If it's the first audio track
+                        # Add in the <file> element we made above
+                        audio_track_clipitem.append(audio_track_clipitem_file)
+                    else:
+                        # Thereafter, merely reference <file> using its ID as normal
+                        audio_track_fileTag = createElem(audio_track, 'file')
+                        audio_track_fileTag.set('id', media_item.fileID)
 
-                file_tag_media_audio = createElem(file_tag_media, 'audio')
-                tag_channelcount = createElem(file_tag_media_audio, 'channelcount', '1')
-                tag_audiochannel = createElem(file_tag_media_audio, 'audiochannel')
-                tag_sourcechannel = createElem(tag_audiochannel, 'sourcechannel', n_channel_index)
-            """
-            """
-            # NOT USED AT THE MOMENT
-            # Create a <link> reference for every audio channel which represents a separate clip, linked to each other
-            for n in range(media_item.audio_channels):
-                n_trackindex = n + 1
-            """
+                    audio_track_clipitem_sourcetrack = createElem(audio_track_clipitem, 'sourcetrack')
+                    createElem(audio_track_clipitem_sourcetrack, 'mediatype', 'audio')
+                    audio_track_clipitem_sourcetrack_trackindex = createElem(audio_track_clipitem_sourcetrack, 'trackindex', n + 1)
 
             # Finished. Save the master clip to the object.
             self._master_clips.append(clip)
@@ -398,8 +417,8 @@ class Project:
         self.project = ET.Element('project')
 
         tag_project_root_bin = createElem(self.project, 'bin')
-        self.root = createElem(tag_project_root_bin, 'children')
         tag_project_name = createElem(tag_project_root_bin, 'name', project_name)
+        self.root = createElem(tag_project_root_bin, 'children')
 
         """Centralised place for IDs"""
         self.index = {}
@@ -415,14 +434,6 @@ class Project:
         bin_children = createElem(bin, 'children')
         return bin_children
 
-    """ necessary?
-    def add_item_to_bin(self, item, bin):
-        # Find the bin by name, then go above to its parent and then down to children)
-        target = self.root.findall('./bin/name/' + bin + '/../children')
-        target.append(item)
-        return True
-    """
-
     def incrementID(self, index_type):
         self.index[index_type] += 1
         return index_type + '-' + str(self.index[index_type])
@@ -435,10 +446,6 @@ class Project:
         tree = ET.ElementTree(self.xmeml_document)
         tree.write(output_file, encoding='UTF-8', xml_declaration=True)
         # TODO: Make sure to include <xmeml version="4">, DOCTYPE and UTF-8
-
-        """ Write to stdout
-        # ET.dump(tree)
-        """
 
 
 # -----
