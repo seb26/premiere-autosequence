@@ -250,7 +250,7 @@ class MediaItem:
 
 
 class MasterClips:
-    def __init__(self, media_items):
+    def __init__(self, project, media_items):
         """
         # Given a list of MediaFile objects...
 
@@ -273,13 +273,10 @@ class MasterClips:
             # Increment the masterclipID, and assign it back to the [media_item]
             # Add it to the id="" attribute
             # And describe it in text as <masterclipid>
-            media_item.masterclipID = self._incrementID('masterclip')
+            media_item.masterclipID = project.incrementID('masterclip')
             clip.set('id', media_item.masterclipID )
             masterclipid_tag = createElem(clip, 'masterclipid', media_item.masterclipID)
             clip.set('explodedTracks', 'true')
-
-            label = xml_add_label(DEFAULT_LABEL_COLOUR_VIDEO)
-            clip.append(label)
 
             rate = xml_add_framerate(media_item.frameRate)
             clip.append(rate)
@@ -289,6 +286,8 @@ class MasterClips:
             ##
             ## VIDEO VERSUS AUDIO
             if media_item.mediaType == 'video':
+
+
                 media_video = createElem(media, 'video')
                 media_video_track = createElem(media_video, 'track')
 
@@ -296,7 +295,7 @@ class MasterClips:
                 # Unlike masterclipID, clipitemID is never referenced outside of the masterclip
                 # They are essentially single use
                 # For every audio clip inside a master clip, please increment a new ID
-                clipitem.set('id', self._incrementID('clipitem'))
+                clipitem.set('id', project.incrementID('clipitem'))
                 clipitem.append(masterclipid_tag)
                 clipitem.append(rate)
                 alphatype = createElem(clipitem, 'alphatype', media_item.alphatype)
@@ -306,7 +305,7 @@ class MasterClips:
                 file_tag = createElem(clipitem, 'file')
                 # Increment the fileID, and assign it back to the [media_item]
                 # Add it to the id="" attribute
-                media_item.fileID = self._incrementID('file')
+                media_item.fileID = project.incrementID('file')
                 file_tag.set('id', media_item.fileID )
 
                 file_tag.append(name)
@@ -314,21 +313,25 @@ class MasterClips:
                 file_tag.append(duration)
                 pathurl = createElem(file_tag, 'pathurl', media_item.pathurl)
 
-                # LEAVE the <media><video><audio> tags completely empty.
+                # Create the <media><audio><video> tags
+                # But, leave them empty
                 file_tag_media = createElem(file_tag, 'media')
                 file_tag_media_video = createElem(file_tag_media, 'video')
+                file_tag_media_audio = createElem(file_tag_media, 'audio')
 
             elif media_item.mediaType == 'audio':
+
+
                 media_audio = createElem(media, 'audio')
                 media_audio_track = createElem(media_audio, 'track')
 
                 clipitem = createElem(media_audio_track, 'clipitem')
-                clipitem.set('id', self._incrementID('clipitem'))
+                clipitem.set('id', project.incrementID('clipitem'))
                 clipitem.append(masterclipid_tag)
                 clipitem.append(rate)
 
                 file_tag = createElem(clipitem, 'file')
-                media_item.fileID = self._incrementID('file')
+                media_item.fileID = project.incrementID('file')
                 file_tag.set('id', media_item.fileID )
 
                 file_tag.append(name)
@@ -380,6 +383,7 @@ class AutoSequence:
 
         # Get timecode_startFrame of all clips, get earliest start (use min())
         # Establish desired duration (endFrame + duration - startFrame)
+        self._autosequence = ET.Element('autosequence_goes_here')
         pass
 
     def generate(self, sequence_name):
@@ -421,31 +425,43 @@ class Project:
         self.index[index_type] += 1
         return index_type + '-' + str(self.index[index_type])
 
-    def generateProjectXML(self):
-        tree = ET.ElementTree(self.project)
-        ET.dump(tree)
+    def generateProjectXML(self, output_file):
+        self.xmeml_document = ET.Element('xmeml')
+        self.xmeml_document.set('version', DEFAULT_XMEML_VERSION)
+        self.xmeml_document.append(self.project)
 
-        # Write the tree somewhere!
-        # Make sure to include <xmeml version="4">, DOCTYPE and UTF-8
+        tree = ET.ElementTree(self.xmeml_document)
+        tree.write(output_file, encoding='UTF-8', xml_declaration=True)
+        # TODO: Make sure to include <xmeml version="4">, DOCTYPE and UTF-8
 
+        """ Write to stdout
+        # ET.dump(tree)
+        """
 
 
 # -----
 
+
 def main():
     TEMP_LIST_OF_FILES = [
-        "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\T001C010_190511_R6XC.[1043405-1045094].mov",
-        "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\A002C001_190511_R6XC.[1230177-1232759].mov",
-        "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\A002C002_190511_R6XC.[1238357-1239433].mov",
-        "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\A002C003_190511_R6XC.[1240863-1243708].mov",
-        "Q:\\Projects\\PRODIGAL_SON\\MEDIA_TRANS\\190511_D01\\A002C004_190511_R6XC.[1245536-1249161].mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071221_C002.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071223_C003.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov",
     ]
+    TEMP_PROJECT_XML_DESTINATION = 'samples\\sample_out_5.xml'
     CREATE_SEPARATE_AUTOSEQUENCES = True
 
     media_items = []
     for filepath in TEMP_LIST_OF_FILES:
         media_item = MediaItem(filepath)
         media_items.append(media_item)
+
+    """
+    # Sort by startFrame
+    """
+    media_items.sort()
 
 
     project = Project('AutoSeq_V1')
@@ -459,8 +475,8 @@ def main():
     video_items = [ item for item in media_items if item.mediaType == 'video' ]
     audio_items = [ item for item in media_items if item.mediaType == 'audio' ]
 
-    masterclips_video = MasterClips(video_items).generate()
-    masterclips_audio = MasterClips(audio_items).generate()
+    masterclips_video = MasterClips(project, video_items).generate()
+    masterclips_audio = MasterClips(project, audio_items).generate()
 
 
     for item in masterclips_video:
@@ -473,19 +489,14 @@ def main():
     # Start to make AutoSequences
     """
     if CREATE_SEPARATE_AUTOSEQUENCES:
-        target_items = video_items + audio_items
-    else:
         # Haven't yet found a way to make a combined timeline with both video & audio
-        pass
 
-    n_sequence = 0
-    for group_of_media_items in target_items:
-        n_sequence += 1
-        autosequence = AutoSequence(group_of_media_items).generate('AutoSeq_' + str(n_sequence))
-        # Add it to a bin
-        bin_sequences.append(autosequence)
+        autosequence_video = AutoSequence(video_items).generate('AutoSeq_V')
+        autosequence_audio = AutoSequence(audio_items).generate('AutoSeq_A')
+        bin_sequences.append(autosequence_video)
+        bin_sequences.append(autosequence_audio)
 
-    project.generateProjectXML()
+    project.generateProjectXML(TEMP_PROJECT_XML_DESTINATION)
 
 if __name__ == "__main__":
     main()
