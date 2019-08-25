@@ -266,6 +266,7 @@ class MasterClips:
         for media_item in media_items:
 
             clip = ET.Element('clip')
+            clip.set('explodedTracks', 'true')
             duration = createElem(clip, 'duration', media_item.duration)
             ismasterclip = createElem(clip, 'ismasterclip', 'TRUE')
             name = createElem(clip, 'name', media_item.name)
@@ -276,7 +277,6 @@ class MasterClips:
             media_item.masterclipID = project.incrementID('masterclip')
             clip.set('id', media_item.masterclipID )
             masterclipid_tag = createElem(clip, 'masterclipid', media_item.masterclipID)
-            clip.set('explodedTracks', 'true')
 
             rate = xml_add_framerate(media_item.frameRate)
             clip.append(rate)
@@ -313,11 +313,12 @@ class MasterClips:
                 file_tag.append(duration)
                 pathurl = createElem(file_tag, 'pathurl', media_item.pathurl)
 
-                # Create the <media><audio><video> tags
+                # Create the <media><video> tags
                 # But, leave them empty
                 file_tag_media = createElem(file_tag, 'media')
                 file_tag_media_video = createElem(file_tag_media, 'video')
                 file_tag_media_audio = createElem(file_tag_media, 'audio')
+                file_tag_media_audio2 = createElem(file_tag_media, 'audio')
 
             elif media_item.mediaType == 'audio':
 
@@ -336,29 +337,30 @@ class MasterClips:
 
                 file_tag.append(name)
                 file_tag.append(rate)
-                file_tag.append(duration)
                 pathurl = createElem(file_tag, 'pathurl', media_item.pathurl)
 
                 file_tag_media = createElem(file_tag, 'media')
 
-                # Create an <audio> tag inside <media> for every single audio channel
-                # THIS SECTION
-                # MAKES A GIANT ASSUMPTION THAT ALL CHANNELS 1:1 EQUAL TRACKS
-                # I.E. EVERYTHING IS MONO AND SINGULAR AND STEREO DOESN'T EXIST
-                for n in range(media_item.audio_channels):
-                    n_channel_index = n + 1
+            """
+            # Create an <audio> tag inside <media> for every single audio channel
+            # Applies for both video and audio master clips.
+            # THIS SECTION
+            # MAKES A GIANT ASSUMPTION THAT ALL CHANNELS 1:1 EQUAL TRACKS
+            # I.E. EVERYTHING IS MONO AND SINGULAR AND STEREO DOESN'T EXIST
+            for n in range(media_item.audio_channels):
+                n_channel_index = n + 1
 
-                    file_tag_media_audio = createElem(file_tag_media, 'audio')
-                    samplecharx_channelcount = createElem(video_samplecharx, 'channelcount', '1')
-                    samplecharx_audiochannel = createElem(samplecharx_channelcount, 'audiochannel')
-                    samplecharx_sourcechannel = createElem(samplecharx_audiochannel, 'sourcechannel', n_channel_index)
-
-                    """
-                    # NOT USED AT THE MOMENT
-                    # Create a <link> reference for every audio channel which represents a separate clip, linked to each other
-                    for n in range(media_item.audio_channels):
-                        n_trackindex = n + 1
-                    """
+                file_tag_media_audio = createElem(file_tag_media, 'audio')
+                tag_channelcount = createElem(file_tag_media_audio, 'channelcount', '1')
+                tag_audiochannel = createElem(file_tag_media_audio, 'audiochannel')
+                tag_sourcechannel = createElem(tag_audiochannel, 'sourcechannel', n_channel_index)
+            """
+            """
+            # NOT USED AT THE MOMENT
+            # Create a <link> reference for every audio channel which represents a separate clip, linked to each other
+            for n in range(media_item.audio_channels):
+                n_trackindex = n + 1
+            """
 
             # Finished. Save the master clip to the object.
             self._master_clips.append(clip)
@@ -449,6 +451,11 @@ def main():
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071221_C002.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071223_C003.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov",
+        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_005.WAV",
+        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_001.WAV",
+        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_002.WAV",
+        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_003.WAV",
+        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_004.WAV",
     ]
     TEMP_PROJECT_XML_DESTINATION = 'samples\\sample_out_5.xml'
     CREATE_SEPARATE_AUTOSEQUENCES = True
