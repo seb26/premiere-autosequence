@@ -48,9 +48,10 @@ def xml_add_link_reference(clipitemid, mediatype, trackindex, clipindex=1):
     mediatype = createElem(link, 'mediatype', mediatype)
     trackindex = createElem(link, 'trackindex', trackindex)
     clipindex = createElem(link, 'clipindex', clipindex)
+    if mediatype == 'audio':
+        # For some reason, audio items attract this attribute
+        groupindex = createElem(link, 'groupindex', '1')
     return link
-
-
 
 
 class MediaItem:
@@ -73,6 +74,7 @@ class MediaItem:
             return None
 
         # Probe it and its probe result to the object
+        print(self.filename, ': running ffprobe...')
         data = subprocess.run(
             [
                 'ffprobe', self.filepath,
@@ -289,15 +291,25 @@ class MasterClips:
             duration = createElem(clip, 'duration', media_item.duration)
             ismasterclip = createElem(clip, 'ismasterclip', 'TRUE')
             name = createElem(clip, 'name', media_item.name)
+
+            # Rate, and also save this XML element for reuse later
             rate = xml_add_framerate(media_item.frameRate)
             clip.append(rate)
-            # Also save this XML element for reuse later
             media_item.frameRateTag = rate
 
-            tag_media = createElem(clip, 'media')
-
             # To store <link> references
-            link_references_group = []
+            if hasattr(media_item, 'link_references'):
+                if len(media_item.link_references) > 0:
+                    pass
+                else:
+                    media_item.link_references = []
+            else:
+                media_item.link_references = []
+
+            # Create an umbrella group for media
+            tag_media = createElem(clip, 'media')
+            # Flag to determine if a <file> entry has already been declared
+            FILE_TAG_DECLARED = False
 
             """
             # VIDEO CLIP-SPECIFIC
@@ -319,6 +331,7 @@ class MasterClips:
                 # Define the <file> entry
                 video_clipitem_file = createElem(video_clipitem, 'file')
                 media_item.fileID = project.incrementID('file')
+                FILE_TAG_DECLARED = True
                 video_clipitem_file.set('id', media_item.fileID)
                 video_clipitem_file.append(name)
                 video_clipitem_file.append(rate)
@@ -330,52 +343,36 @@ class MasterClips:
                 video_clipitem_file_media_video = createElem(video_clipitem_file_media, 'video')
 
                 # If there is embedded camera audio...
+                # Store some audio information INSIDE THE <VIDEO> TRACK.
                 if media_item.audio_channels > 0:
                     video_clipitem_file_media_audio = createElem(video_clipitem_file_media, 'audio')
                     tag_channelcount = createElem(video_clipitem_file_media_audio, 'channelcount', media_item.audio_channels)
                     # Add a <link> reference
                     video_clipitem_linkref = xml_add_link_reference(video_clipitem_id, 'video', '1')
-                    link_references_group.append(video_clipitem_linkref)
+                    media_item.link_references.append(video_clipitem_linkref)
 
-                # Also create <audio><track>s
+            # Apply the following for ALL audio including camera embedded.
+            if media_item.audio_channels > 0:
                 tag_audio = createElem(tag_media, 'audio')
 
-                n_index_audio_channel = 0
-                for n in range(media_item.audio_channels):
-                    n_index_audio_channel += 1
-                    tag_audio_track = createElem(tag_audio, 'track')
-                    tag_audio_track.set('id', project.incrementID('clipitem'))
-                    tag_audio_track.append(masterclipid_tag)
-                    tag_audio_track.append(name)
-                    tag_audio_track.append(rate)
-                    tag_audio_track_file = createElem(tag_audio_track, 'file')
-                    tag_audio_track_file.set('id', media_item.fileID)
+                if not FILE_TAG_DECLARED:
+                    # Pre-create the <file> item
+                    # Soon, it will be attached to the very first track of audio
+                    audio_track_clipitem_file = ET.Element('file')
+                    media_item.fileID = project.incrementID('file')
+                    audio_track_clipitem_file.set('id', media_item.fileID)
+                    audio_track_clipitem_file_pathurl = createElem(audio_track_clipitem_file, 'pathurl', media_item.pathurl)
+                    audio_track_clipitem_file.append(name)
+                    audio_track_clipitem_file.append(rate)
+                    audio_track_clipitem_file.append(duration)
+                    audio_track_clipitem_file_media = createElem(audio_track_clipitem_file, 'media')
 
-                    tag_audio_track_sourcetrack = createElem(tag_audio_track, 'sourcetrack')
-                    tag_audio_track_sourcetrack_mediatype = createElem(tag_audio_track_sourcetrack, 'mediatype', 'audio')
-                    tag_audio_track_sourcetrack_trackindex = createElem(tag_audio_track_sourcetrack, 'trackindex', n_index_audio_channel)
-
-
-            elif media_item.mediaType == 'audio':
-                tag_audio = createElem(tag_media, 'audio')
-
-                # Pre-create the <file> item
-                # Soon, it will be attached to the very first track of audio
-                audio_track_clipitem_file = ET.Element('file')
-                media_item.fileID = project.incrementID('file')
-                audio_track_clipitem_file.set('id', media_item.fileID)
-                audio_track_clipitem_file_pathurl = createElem(audio_track_clipitem_file, 'pathurl', media_item.pathurl)
-                audio_track_clipitem_file.append(name)
-                audio_track_clipitem_file.append(rate)
-                audio_track_clipitem_file.append(duration)
-                audio_track_clipitem_file_media = createElem(audio_track_clipitem_file, 'media')
-
-                for n in range(media_item.audio_channels):
-                    n_audio_channel = n + 1
-                    audio_track_clipitem_file_media_audio = createElem(audio_track_clipitem_file_media, 'audio')
-                    audio_track_clipitem_file_media_audio_channelcount = createElem(audio_track_clipitem_file_media_audio, 'channelcount', '1') # Mono assumption!
-                    audio_track_clipitem_file_media_audio_audiochannel = createElem(audio_track_clipitem_file_media_audio, 'audiochannel')
-                    audio_track_clipitem_file_media_audio_audiochannel_sourcechannel = createElem(audio_track_clipitem_file_media_audio_audiochannel, 'sourcechannel', n_audio_channel)
+                    for n in range(media_item.audio_channels):
+                        n_audio_channel = n + 1
+                        audio_track_clipitem_file_media_audio = createElem(audio_track_clipitem_file_media, 'audio')
+                        audio_track_clipitem_file_media_audio_channelcount = createElem(audio_track_clipitem_file_media_audio, 'channelcount', '1') # Mono assumption!
+                        audio_track_clipitem_file_media_audio_audiochannel = createElem(audio_track_clipitem_file_media_audio, 'audiochannel')
+                        audio_track_clipitem_file_media_audio_audiochannel_sourcechannel = createElem(audio_track_clipitem_file_media_audio_audiochannel, 'sourcechannel', n_audio_channel)
 
                 # Apply the following steps FOR EACH CHANNEL OF AUDIO
                 for n in range(media_item.audio_channels):
@@ -389,14 +386,20 @@ class MasterClips:
                     audio_track_clipitem_id = project.incrementID('clipitem')
                     audio_track_clipitem.set('id', audio_track_clipitem_id)
                     audio_track_clipitem_linkref = xml_add_link_reference(audio_track_clipitem_id, 'audio', n_audio_channel)
-                    link_references_group.append(audio_track_clipitem_linkref)
+                    media_item.link_references.append(audio_track_clipitem_linkref)
 
-                    if n_audio_channel == 1:
-                        # If it's the first audio track
-                        # Add in the <file> element we made above
-                        audio_track_clipitem.append(audio_track_clipitem_file)
+                    if not FILE_TAG_DECLARED:
+                        # If we haven't yet declared a <file>...
+                        if n == 1:
+                            # And we are looping over the FIRST audio channel,
+                            # THEN: Add in the <file> element we made above
+                            audio_track_clipitem.append(audio_track_clipitem_file)
+                        else:
+                            # Thereafter, merely reference <file> using its ID as normal
+                            audio_track_fileTag = createElem(audio_track, 'file')
+                            audio_track_fileTag.set('id', media_item.fileID)
                     else:
-                        # Thereafter, merely reference <file> using its ID as normal
+                        # Merely reference <file> using its ID as normal
                         audio_track_fileTag = createElem(audio_track, 'file')
                         audio_track_fileTag.set('id', media_item.fileID)
 
@@ -404,8 +407,16 @@ class MasterClips:
                     createElem(audio_track_clipitem_sourcetrack, 'mediatype', 'audio')
                     audio_track_clipitem_sourcetrack_trackindex = createElem(audio_track_clipitem_sourcetrack, 'trackindex', n_audio_channel)
 
-            print(link_references_group)
+            # Write all the link references to the XML item as well
+            if media_item.mediaType == 'video':
+                for item in media_item.link_references:
+                    video_clipitem.append(item)
 
+            if media_item.audio_channels > 0:
+                all_audio_tracks = tag_audio.findall('track/clipitem')
+                for track in all_audio_tracks:
+                    for item in media_item.link_references:
+                        track.append(item)
 
             # Finished. Save the master clip back to the media_item.
             media_item.masterclip = clip
@@ -422,6 +433,9 @@ class AutoSequence:
         # With all clips appearing staggered on the timeline at their start timecode
         """
 
+        if len(media_items) == 0:
+            raise Exception('AutoSequence was called with no media_items. Check your items before calling it.')
+            return
 
         """
         # DETERMINE AUTOSEQUENCE START, END, LENGTH & AUDIO CHANNELS
@@ -509,12 +523,15 @@ class AutoSequence:
             # Save the track back to our map (sequence_audio_tracks)
             sequence_audio_tracks[n_audio_channel] = current_track
 
+        # Used in <link><clipindex>
+        sequence_clip_link_count = 1
         """
         # Iterate over media_items and:
         # - Create <clipitem>s
         # - Add them to the correct tracks
         """
         for media_item in media_items:
+
 
             masterclipid = media_item.masterclip.find('masterclipid')
             name = media_item.masterclip.find('name')
@@ -529,9 +546,20 @@ class AutoSequence:
             frame_in = 0
             frame_out = media_item.duration
 
+            # Planned sequence data to be written
+            # To be written ALTOGETHER AT THE END when the media_item is finished
+            planned_sequence_video_track = []
+            planned_sequence_audio_tracks = []
+
+            # Local clip references
+            # Local because they refer only to this media item
+            local_link_references = []
+            sequence_clip_link_count += 1
+
             if media_item.mediaType == 'video':
                 clipitem_video = ET.Element('clipitem')
-                clipitem_video.set('id', project.incrementID('clipitem'))
+                clipitem_video_id = project.incrementID('clipitem')
+                clipitem_video.set('id', clipitem_video_id)
                 clipitem_video.append(masterclipid)
                 clipitem_video.append(name)
                 clipitem_video.append(duration)
@@ -544,8 +572,12 @@ class AutoSequence:
                 createElem(clipitem_video, 'in', frame_in)
                 createElem(clipitem_video, 'out', frame_out)
 
-                # Write it to the sequence directly
-                sequence_video_track.append(clipitem_video)
+                # Quickly save a <link> reference
+                clipitem_video_linkref = xml_add_link_reference(clipitem_video_id, 'video', '1', sequence_clip_link_count)
+                local_link_references.append(clipitem_video_linkref)
+
+                # Write the whole <clipitem> to the sequence directly
+                planned_sequence_video_track.append(clipitem_video)
 
             # If the item contains ANY audio...
             if media_item.audio_channels > 0:
@@ -554,7 +586,8 @@ class AutoSequence:
                     n_audio_channel = n + 1
 
                     clipitem_audio = ET.Element('clipitem')
-                    clipitem_audio.set('id', project.incrementID('clipitem'))
+                    clipitem_audio_id = project.incrementID('clipitem')
+                    clipitem_audio.set('id', clipitem_audio_id)
                     clipitem_audio.append(masterclipid)
                     clipitem_audio.append(name)
                     clipitem_audio.append(duration)
@@ -570,12 +603,36 @@ class AutoSequence:
                     createElem(clipitem_audio_sourcetrack, 'mediatype', 'audio')
                     createElem(clipitem_audio_sourcetrack, 'trackindex', n_audio_channel)
 
-                    # Append it to the master dict of tracks
-                    sequence_audio_tracks[n_audio_channel].append(clipitem_audio)
+                    # Create link reference
+                    clipitem_audio_linkref = xml_add_link_reference(clipitem_audio_id, 'audio', n_audio_channel, sequence_clip_link_count)
+                    local_link_references.append(clipitem_audio_linkref)
 
-        # Once finished, write these tracks to the <audio> tag in the rest of the tree
-        for n_track in sorted(sequence_audio_tracks):
-            sequence_audio_tag.append(sequence_audio_tracks[n_track])
+                    # Plan to write it to the audio tracks
+                    planned_sequence_audio_tracks.append( ( n_audio_channel, clipitem_audio) )
+
+            # Recap the <link> references that we created throughout
+            # Search through the "planned" video/audio tracks
+            for item in local_link_references:
+                if media_item.mediaType == 'video':
+                    for clipitem_video in planned_sequence_video_track:
+                        clipitem_video.append(item)
+
+                if media_item.audio_channels > 0:
+                    for n_audio_channel, clipitem_audio in planned_sequence_audio_tracks:
+                        clipitem_audio.append(item)
+
+            # Once finished, write these planned tracks to the sequence in the rest of the tree
+            for clipitem_v in planned_sequence_video_track:
+                sequence_video_track.append(clipitem_v)
+
+            # Map audio channels to tracks
+            for n_audio_channel, clipitem_a in planned_sequence_audio_tracks:
+                sequence_audio_tracks[n_audio_channel].append(clipitem_a)
+
+        # Write all audio tracks to the sequence
+        for track_number in sorted(sequence_audio_tracks):
+            sequence_audio_tag.append(sequence_audio_tracks[track_number])
+
         """
         # DEBUG: SHow me the contents of the audio tracks right now
         for k, v in sequence_audio_tracks.items():
@@ -630,21 +687,59 @@ class Project:
 
 def main():
     TEMP_LIST_OF_FILES = [
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_021.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_001.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_002.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_003.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_004.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_005.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_006.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_007.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_008.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_009.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_010.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_011.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_012.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_013.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_014.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_015.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_016.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_017.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_018.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_019.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_020.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071759_C025.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071810_C026.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071221_C002.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071223_C003.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov",
-        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_001.WAV",
-        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_002.WAV",
-        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_003.WAV",
-        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_004.WAV",
-        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_005.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071244_C006.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071251_C007.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071317_C008.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071319_C009.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071325_C010.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071329_C011.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071332_C012.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071335_C013.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071336_C014.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071707_C015.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071717_C016.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071722_C017.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071726_C018.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071737_C019.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071740_C020.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071743_C021.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071748_C022.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071750_C023.mov",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071754_C024.mov",
     ]
     TEMP_PROJECT_XML_DESTINATION = 'samples\\sample_out_5.xml'
     CREATE_SEPARATE_AUTOSEQUENCES = True
 
     media_items = []
+    print('Media files given: ', len(TEMP_LIST_OF_FILES))
     for filepath in TEMP_LIST_OF_FILES:
         media_item = MediaItem(filepath)
         media_items.append(media_item)
@@ -681,10 +776,12 @@ def main():
     if CREATE_SEPARATE_AUTOSEQUENCES:
         # Haven't yet found a way to make a combined timeline with both video & audio
 
-        autosequence_video = AutoSequence(project, video_items, 'AutoSeq_V').generate()
-        autosequence_audio = AutoSequence(project, audio_items, 'AutoSeq_A').generate()
-        bin_sequences.append(autosequence_video)
-        bin_sequences.append(autosequence_audio)
+        if len(video_items) > 0:
+            autosequence_video = AutoSequence(project, video_items, 'AutoSeq_V').generate()
+            bin_sequences.append(autosequence_video)
+        if len(audio_items) > 0:
+            autosequence_audio = AutoSequence(project, audio_items, 'AutoSeq_A').generate()
+            bin_sequences.append(autosequence_audio)
 
     project.generateProjectXML(TEMP_PROJECT_XML_DESTINATION)
 
