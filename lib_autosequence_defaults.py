@@ -32,7 +32,7 @@ DEFAULT_SEQUENCE_ATTRIBUTES = {
     "MZ.Sequence.PreviewFrameSizeWidth": "1920",
     "MZ.Sequence.PreviewRenderingClassID": "1297106761",
     "MZ.Sequence.PreviewRenderingPresetCodec": "1297107278",
-    "MZ.Sequence.PreviewRenderingPresetPath": "EncoderPresets\SequencePreview\d8484cf3-c96c-4622-ab1f-ac1a16e196f9\I-Frame Only MPEG.epr",
+    "MZ.Sequence.PreviewRenderingPresetPath": "EncoderPresets\\SequencePreview\\d8484cf3-c96c-4622-ab1f-ac1a16e196f9\\I-Frame Only MPEG.epr",
     "MZ.Sequence.PreviewUseMaxBitDepth": "false",
     "MZ.Sequence.PreviewUseMaxRenderQuality": "false",
     "MZ.Sequence.VideoTimeDisplayFormat": "101",
