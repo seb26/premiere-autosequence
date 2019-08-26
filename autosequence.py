@@ -7,7 +7,7 @@ from urllib.parse import quote
 
 # APPLICATION ASSETS
 import timecode
-from autosequence_v2_defaults import *
+from autosequence_defaults import *
 
 
 """
