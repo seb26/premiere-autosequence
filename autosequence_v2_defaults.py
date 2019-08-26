@@ -5,6 +5,14 @@ DEFAULT_AUDIO_CHANNELS = 2
 DEFAULT_VIDEO_FRAME_RATE = 25
 DEFAULT_FRAME_RATE_NTSC = 'FALSE'
 DEFAULT_VIDEO_TIMECODE_DISPLAYFORMAT = 'NDF'
+DEFAULT_VIDEO_ATTRIBUTES = {
+    'width': 1920,
+    'height': 1080,
+    'alphatype': 'none',
+    'anamorphic': 'FALSE',
+    'pixelaspectratio': 'square',
+    'fielddominance': 'none'
+}
 VALID_FRAME_RATES = [ 23.976, 23.98, 24, 25, 29.97, 30 ]
 
 DEFAULT_SEQUENCE_COLOURDEPTH = 24 # bit
@@ -18,29 +26,16 @@ DEFAULT_LABEL_COLOUR_BIN = 'Mango'
 DEFAULT_XMEML_VERSION = '4'
 
 DEFAULT_SEQUENCE_ATTRIBUTES = {
-    "TL.SQAudioVisibleBase": "0",
-    "TL.SQVideoVisibleBase": "0",
-    "TL.SQVisibleBaseTime": "0",
-    "TL.SQAVDividerPosition": "0.5",
-    "TL.SQHideShyTracks": "0",
-    "TL.SQHeaderWidth": "236",
-    "Monitor.ProgramZoomOut": "1923967987200000",
-    "Monitor.ProgramZoomIn": "0",
-    "TL.SQTimePerPixel": "5.8178647023939369",
-    "MZ.EditLine": "1897723054080000",
+    "MZ.Sequence.AudioTimeDisplayFormat": "200",
+    "MZ.Sequence.EditingModeGUID": "d8484cf3-c96c-4622-ab1f-ac1a16e196f9",
     "MZ.Sequence.PreviewFrameSizeHeight": "1080",
     "MZ.Sequence.PreviewFrameSizeWidth": "1920",
-    "MZ.Sequence.AudioTimeDisplayFormat": "200",
     "MZ.Sequence.PreviewRenderingClassID": "1297106761",
     "MZ.Sequence.PreviewRenderingPresetCodec": "1297107278",
-    "MZ.Sequence.PreviewRenderingPresetPath": "EncoderPresets\\SequencePreview\\d8484cf3-c96c-4622-ab1f-ac1a16e196f9\\I-Frame Only MPEG.epr",
-    "MZ.Sequence.PreviewUseMaxRenderQuality": "false",
+    "MZ.Sequence.PreviewRenderingPresetPath": "EncoderPresets\SequencePreview\d8484cf3-c96c-4622-ab1f-ac1a16e196f9\I-Frame Only MPEG.epr",
     "MZ.Sequence.PreviewUseMaxBitDepth": "false",
-    "MZ.Sequence.EditingModeGUID": "d8484cf3-c96c-4622-ab1f-ac1a16e196f9",
+    "MZ.Sequence.PreviewUseMaxRenderQuality": "false",
     "MZ.Sequence.VideoTimeDisplayFormat": "101",
-    "MZ.WorkOutPoint": "72272632320000",
-    "MZ.WorkInPoint": "0",
-    "MZ.ZeroPoint": "10601662579200000",
     "explodedTracks": "true",
 }
 

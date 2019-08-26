@@ -42,6 +42,14 @@ def xml_add_label(colour):
     label2.text = colour
     return labels
 
+def xml_add_link_reference(clipitemid, mediatype, trackindex, clipindex=1):
+    link = ET.Element('link')
+    linkclipref = createElem(link, 'linkclipref', clipitemid)
+    mediatype = createElem(link, 'mediatype', mediatype)
+    trackindex = createElem(link, 'trackindex', trackindex)
+    clipindex = createElem(link, 'clipindex', clipindex)
+    return link
+
 
 
 
@@ -146,23 +154,23 @@ class MediaItem:
             # More complicated attributes
             if 'sample_aspect_ratio' in video_stream:
                 if video_stream['sample_aspect_ratio'] == '1:1':
-                    self.pixelaspectratio = 'square'
+                    self.pixelaspectratio = DEFAULT_VIDEO_ATTRIBUTES['pixelaspectratio']
                 else:
                     # Otherwise stick the ratio there in it
                     self.pixelaspectratio = video_stream['sample_aspect_ratio']
             if 'field_order' in video_stream:
                 if video_stream['field_order'] == 'progressive':
-                    self.fielddominance = 'none'
+                    self.fielddominance = 'none' # Explicitly none
                 else:
                     # This could potentially be problematic and not be the correct value.
                     # Whatever, I'm not forward thinking enough to facilitate interlaced media.
                     self.fielddominance = video_stream['field_order']
             else:
-                self.fielddominance = 'none'
+                self.fielddominance = DEFAULT_VIDEO_ATTRIBUTES['fielddominance']
 
             # Need to connect these to Ffprobe and be accurate
-            self.alphatype = 'none'
-            self.anamorphic = 'FALSE'
+            self.alphatype = DEFAULT_VIDEO_ATTRIBUTES['alphatype']
+            self.anamorphic = DEFAULT_VIDEO_ATTRIBUTES['anamorphic']
 
 
         """
@@ -288,6 +296,9 @@ class MasterClips:
 
             tag_media = createElem(clip, 'media')
 
+            # To store <link> references
+            link_references_group = []
+
             """
             # VIDEO CLIP-SPECIFIC
             """
@@ -295,7 +306,8 @@ class MasterClips:
                 tag_video = createElem(tag_media, 'video')
                 tag_video_track = createElem(tag_video, 'track')
                 video_clipitem = createElem(tag_video_track, 'clipitem')
-                video_clipitem.set('id', project.incrementID('clipitem'))
+                video_clipitem_id = project.incrementID('clipitem')
+                video_clipitem.set('id', video_clipitem_id)
 
                 video_clipitem.append(masterclipid_tag)
                 video_clipitem.append(name)
@@ -321,6 +333,9 @@ class MasterClips:
                 if media_item.audio_channels > 0:
                     video_clipitem_file_media_audio = createElem(video_clipitem_file_media, 'audio')
                     tag_channelcount = createElem(video_clipitem_file_media_audio, 'channelcount', media_item.audio_channels)
+                    # Add a <link> reference
+                    video_clipitem_linkref = xml_add_link_reference(video_clipitem_id, 'video', '1')
+                    link_references_group.append(video_clipitem_linkref)
 
                 # Also create <audio><track>s
                 tag_audio = createElem(tag_media, 'audio')
@@ -341,7 +356,6 @@ class MasterClips:
                     tag_audio_track_sourcetrack_trackindex = createElem(tag_audio_track_sourcetrack, 'trackindex', n_index_audio_channel)
 
 
-
             elif media_item.mediaType == 'audio':
                 tag_audio = createElem(tag_media, 'audio')
 
@@ -357,21 +371,27 @@ class MasterClips:
                 audio_track_clipitem_file_media = createElem(audio_track_clipitem_file, 'media')
 
                 for n in range(media_item.audio_channels):
+                    n_audio_channel = n + 1
                     audio_track_clipitem_file_media_audio = createElem(audio_track_clipitem_file_media, 'audio')
                     audio_track_clipitem_file_media_audio_channelcount = createElem(audio_track_clipitem_file_media_audio, 'channelcount', '1') # Mono assumption!
                     audio_track_clipitem_file_media_audio_audiochannel = createElem(audio_track_clipitem_file_media_audio, 'audiochannel')
-                    audio_track_clipitem_file_media_audio_audiochannel_sourcechannel = createElem(audio_track_clipitem_file_media_audio_audiochannel, 'sourcechannel', n + 1)
+                    audio_track_clipitem_file_media_audio_audiochannel_sourcechannel = createElem(audio_track_clipitem_file_media_audio_audiochannel, 'sourcechannel', n_audio_channel)
 
                 # Apply the following steps FOR EACH CHANNEL OF AUDIO
                 for n in range(media_item.audio_channels):
+                    n_audio_channel = n + 1
                     audio_track = createElem(tag_audio, 'track')
                     audio_track_clipitem = createElem(audio_track, 'clipitem')
-                    audio_track_clipitem.set('id', project.incrementID('clipitem'))
                     audio_track_clipitem.append(masterclipid_tag)
                     audio_track_clipitem.append(name)
                     audio_track_clipitem.append(rate)
 
-                    if n == 0:
+                    audio_track_clipitem_id = project.incrementID('clipitem')
+                    audio_track_clipitem.set('id', audio_track_clipitem_id)
+                    audio_track_clipitem_linkref = xml_add_link_reference(audio_track_clipitem_id, 'audio', n_audio_channel)
+                    link_references_group.append(audio_track_clipitem_linkref)
+
+                    if n_audio_channel == 1:
                         # If it's the first audio track
                         # Add in the <file> element we made above
                         audio_track_clipitem.append(audio_track_clipitem_file)
@@ -382,7 +402,10 @@ class MasterClips:
 
                     audio_track_clipitem_sourcetrack = createElem(audio_track_clipitem, 'sourcetrack')
                     createElem(audio_track_clipitem_sourcetrack, 'mediatype', 'audio')
-                    audio_track_clipitem_sourcetrack_trackindex = createElem(audio_track_clipitem_sourcetrack, 'trackindex', n + 1)
+                    audio_track_clipitem_sourcetrack_trackindex = createElem(audio_track_clipitem_sourcetrack, 'trackindex', n_audio_channel)
+
+            print(link_references_group)
+
 
             # Finished. Save the master clip back to the media_item.
             media_item.masterclip = clip
@@ -424,22 +447,24 @@ class AutoSequence:
         autoseq_audio_channels = max([ media_item.audio_channels for media_item in media_items ])
 
         """
-        # DETERMINE <format> for video, but only if there are video clips
+        # DETERMINE <format> for video
         """
+        autoseq_video_format = ET.Element('format')
+        autoseq_video_format_samplecharx = createElem(autoseq_video_format, 'samplecharacteristics')
+        autoseq_video_format_samplecharx.append(autoseq_framerate_tag)
+
+        # Only attempt these attributes if media_item is a video
+        # Otherwise they won't be defined
         if earliest_clip.mediaType == 'video':
-            autoseq_video_format = ET.Element('format')
-            autoseq_video_format_samplecharx = createElem(autoseq_video_format, 'samplecharacteristics')
-            autoseq_video_format_samplecharx.append(autoseq_framerate_tag)
             autoseq_video_format_samplecharx_codec = createElem(autoseq_video_format_samplecharx, 'codec')
             createElem(autoseq_video_format_samplecharx_codec, 'name', earliest_clip.codec_name)
             # Add these attributes quickly
             for attrib in [ 'width', 'height', 'anamorphic', 'pixelaspectratio', 'fielddominance' ]:
                 createElem(autoseq_video_format_samplecharx, attrib, getattr(earliest_clip, attrib))
-            # And finally sequence bit depth. Generally unchanged in Premiere.
-            createElem(autoseq_video_format_samplecharx, 'colordepth', DEFAULT_SEQUENCE_COLOURDEPTH)
         else:
-            # Otherwise leave it blank
-            autoseq_video_format = ET.Element('format')
+            # Default values for Audio
+            for k, v in DEFAULT_VIDEO_ATTRIBUTES.items():
+                createElem(autoseq_video_format_samplecharx, k, v)
 
         """
         # Create the sequence
@@ -520,9 +545,10 @@ class AutoSequence:
                 createElem(clipitem_video, 'out', frame_out)
 
                 # Write it to the sequence directly
-                sequence_video_tag.append(clipitem_video)
+                sequence_video_track.append(clipitem_video)
 
-            elif media_item.mediaType == 'audio':
+            # If the item contains ANY audio...
+            if media_item.audio_channels > 0:
                 # Create a new audio <clipitem> for every single audio channel
                 for n in range(media_item.audio_channels):
                     n_audio_channel = n + 1
