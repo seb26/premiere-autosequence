@@ -29,7 +29,7 @@ DEFAULT_SEQUENCE_ATTRIBUTES = {
     "TL.SQTimePerPixel": "5.8178647023939369",
     "MZ.EditLine": "1897723054080000",
     "MZ.Sequence.PreviewFrameSizeHeight": "1080",
-    "MZ.Sequence.PreviewFrameSizeWidth": "1678",
+    "MZ.Sequence.PreviewFrameSizeWidth": "1920",
     "MZ.Sequence.AudioTimeDisplayFormat": "200",
     "MZ.Sequence.PreviewRenderingClassID": "1297106761",
     "MZ.Sequence.PreviewRenderingPresetCodec": "1297107278",

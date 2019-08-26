@@ -223,6 +223,7 @@ class MediaItem:
                 seconds_since_midnight = samples_since_midnight / self.audio_sample_rate
                 self.startFrame = int(seconds_since_midnight * self.frameRate)
                 self.startTC = self._timebase.toTC(self.startFrame)
+                self.timecode_displayformat = DEFAULT_VIDEO_TIMECODE_DISPLAYFORMAT
 
             else:
                 # No timecode found at all
@@ -282,6 +283,8 @@ class MasterClips:
             name = createElem(clip, 'name', media_item.name)
             rate = xml_add_framerate(media_item.frameRate)
             clip.append(rate)
+            # Also save this XML element for reuse later
+            media_item.frameRateTag = rate
 
             tag_media = createElem(clip, 'media')
 
@@ -381,35 +384,183 @@ class MasterClips:
                     createElem(audio_track_clipitem_sourcetrack, 'mediatype', 'audio')
                     audio_track_clipitem_sourcetrack_trackindex = createElem(audio_track_clipitem_sourcetrack, 'trackindex', n + 1)
 
-            # Finished. Save the master clip to the object.
-            self._master_clips.append(clip)
-
-
-    def generate(self):
-        return self._master_clips
-
-        # Take all media items in, and return all media items out
-        # Do not split video and audio separately (at least inside here)
-        pass
+            # Finished. Save the master clip back to the media_item.
+            media_item.masterclip = clip
 
 
 class AutoSequence:
-    def __init__(self, media_items):
+    def __init__(self, project, media_items, desired_sequence_name):
+        """
         # Given a list of MediaItem objects
-
         # Create a <sequence>
-        # Establish the video format based on the first clip
-        # Num of video tracks: 1
-        # Num of audio tracks: per the highest audio track count (use max()) channeltype mono
+        # With video format based on the first clip
+        # With num of video tracks: 1
+        # With num of audio tracks: per the highest audio track count (use max()) channeltype mono
+        # With all clips appearing staggered on the timeline at their start timecode
+        """
 
-        # Get timecode_startFrame of all clips, get earliest start (use min())
-        # Establish desired duration (endFrame + duration - startFrame)
-        self._autosequence = ET.Element('autosequence_goes_here')
-        pass
 
-    def generate(self, sequence_name):
-        # add the name
-        return self._autosequence
+        """
+        # DETERMINE AUTOSEQUENCE START, END, LENGTH & AUDIO CHANNELS
+        """
+        earliest_clip = min(media_items)
+        latest_clip = max(media_items)
+
+        autoseq_start = earliest_clip.startFrame
+        autoseq_end = latest_clip.startFrame + latest_clip.duration
+        autoseq_duration = autoseq_end - autoseq_start
+        autoseq_framerate = earliest_clip.frameRate
+        autoseq_framerate_tag = earliest_clip.masterclip.find('rate')
+        autoseq_framerate_displayformat = earliest_clip.timecode_displayformat
+        # DEBUG: print(autoseq_start, autoseq_end, autoseq_duration)
+
+        # Create timecode (HH:MM:SS:FF) versions of the above values
+        autoseq_timebase = timecode.Timecode(earliest_clip.frameRate)
+        autoseq_start_tc = autoseq_timebase.toTC(autoseq_start)
+        # DEBUG: print(autoseq_start_tc)
+
+        # Check every clip's quantity of audio channels, and take the highest number
+        # We will make *that* number of audio tracks total
+        autoseq_audio_channels = max([ media_item.audio_channels for media_item in media_items ])
+
+        """
+        # DETERMINE <format> for video, but only if there are video clips
+        """
+        if earliest_clip.mediaType == 'video':
+            autoseq_video_format = ET.Element('format')
+            autoseq_video_format_samplecharx = createElem(autoseq_video_format, 'samplecharacteristics')
+            autoseq_video_format_samplecharx.append(autoseq_framerate_tag)
+            autoseq_video_format_samplecharx_codec = createElem(autoseq_video_format_samplecharx, 'codec')
+            createElem(autoseq_video_format_samplecharx_codec, 'name', earliest_clip.codec_name)
+            # Add these attributes quickly
+            for attrib in [ 'width', 'height', 'anamorphic', 'pixelaspectratio', 'fielddominance' ]:
+                createElem(autoseq_video_format_samplecharx, attrib, getattr(earliest_clip, attrib))
+            # And finally sequence bit depth. Generally unchanged in Premiere.
+            createElem(autoseq_video_format_samplecharx, 'colordepth', DEFAULT_SEQUENCE_COLOURDEPTH)
+        else:
+            # Otherwise leave it blank
+            autoseq_video_format = ET.Element('format')
+
+        """
+        # Create the sequence
+        """
+        sequence = ET.Element('sequence')
+        sequence.set('id', project.incrementID('sequence'))
+
+        # Add the default attributes
+        # TODO: maybe edit the width and height? To actually match format of first clip
+        for k, v in DEFAULT_SEQUENCE_ATTRIBUTES.items():
+            sequence.set(k, v)
+
+        sequence_name = createElem(sequence, 'name', desired_sequence_name)
+        sequence.append(earliest_clip.frameRateTag)
+        sequence_duration = createElem(sequence, 'duration', autoseq_duration)
+        sequence_timecode_tag = createElem(sequence, 'timecode')
+        sequence_timecode_tag.append(autoseq_framerate_tag)
+        createElem(sequence_timecode_tag, 'frame', autoseq_start)
+        createElem(sequence_timecode_tag, 'timecode', autoseq_start_tc)
+        createElem(sequence_timecode_tag, 'displayformat', autoseq_framerate_displayformat)
+
+        """
+        # Establish some tracks
+        """
+        sequence_media = createElem(sequence, 'media')
+        sequence_video_tag = createElem(sequence_media, 'video')
+        # Add the video format we calculated earlier
+        sequence_video_tag.append(autoseq_video_format)
+        sequence_video_track = createElem(sequence_video_tag, 'track')
+        for k, v in DEFAULT_SEQUENCE_AUDIO_TRACK_ATTRIBUTES.items():
+            sequence_video_track.set(k, v)
+
+        sequence_audio_tag = createElem(sequence_media, 'audio')
+        sequence_audio_tracks = {}
+        for n in range(autoseq_audio_channels):
+            n_audio_channel = n + 1
+            current_track = ET.Element('track')
+
+            for k, v in DEFAULT_SEQUENCE_AUDIO_TRACK_ATTRIBUTES.items():
+                current_track.set(k, v)
+
+            # Save the track back to our map (sequence_audio_tracks)
+            sequence_audio_tracks[n_audio_channel] = current_track
+
+        """
+        # Iterate over media_items and:
+        # - Create <clipitem>s
+        # - Add them to the correct tracks
+        """
+        for media_item in media_items:
+
+            masterclipid = media_item.masterclip.find('masterclipid')
+            name = media_item.masterclip.find('name')
+            duration = media_item.masterclip.find('duration')
+            rate = media_item.masterclip.find('rate')
+            file_tag = ET.Element('file')
+            file_tag.set('id', media_item.fileID)
+
+            # Clip start/end times MUST be offset by the autosequence's start time
+            frame_start = media_item.startFrame - autoseq_start
+            frame_end = frame_start + media_item.duration
+            frame_in = 0
+            frame_out = media_item.duration
+
+            if media_item.mediaType == 'video':
+                clipitem_video = ET.Element('clipitem')
+                clipitem_video.set('id', project.incrementID('clipitem'))
+                clipitem_video.append(masterclipid)
+                clipitem_video.append(name)
+                clipitem_video.append(duration)
+                clipitem_video.append(file_tag)
+                createElem(clipitem_video, 'enabled', 'TRUE')
+                createElem(clipitem_video, 'alphatype', media_item.alphatype)
+
+                createElem(clipitem_video, 'start', frame_start)
+                createElem(clipitem_video, 'end', frame_end)
+                createElem(clipitem_video, 'in', frame_in)
+                createElem(clipitem_video, 'out', frame_out)
+
+                # Write it to the sequence directly
+                sequence_video_tag.append(clipitem_video)
+
+            elif media_item.mediaType == 'audio':
+                # Create a new audio <clipitem> for every single audio channel
+                for n in range(media_item.audio_channels):
+                    n_audio_channel = n + 1
+
+                    clipitem_audio = ET.Element('clipitem')
+                    clipitem_audio.set('id', project.incrementID('clipitem'))
+                    clipitem_audio.append(masterclipid)
+                    clipitem_audio.append(name)
+                    clipitem_audio.append(duration)
+                    clipitem_audio.append(file_tag)
+                    createElem(clipitem_audio, 'enabled', 'TRUE')
+
+                    createElem(clipitem_audio, 'start', frame_start)
+                    createElem(clipitem_audio, 'end', frame_end)
+                    createElem(clipitem_audio, 'in', frame_in)
+                    createElem(clipitem_audio, 'out', frame_out)
+
+                    clipitem_audio_sourcetrack = createElem(clipitem_audio, 'sourcetrack')
+                    createElem(clipitem_audio_sourcetrack, 'mediatype', 'audio')
+                    createElem(clipitem_audio_sourcetrack, 'trackindex', n_audio_channel)
+
+                    # Append it to the master dict of tracks
+                    sequence_audio_tracks[n_audio_channel].append(clipitem_audio)
+
+        # Once finished, write these tracks to the <audio> tag in the rest of the tree
+        for n_track in sorted(sequence_audio_tracks):
+            sequence_audio_tag.append(sequence_audio_tracks[n_track])
+        """
+        # DEBUG: SHow me the contents of the audio tracks right now
+        for k, v in sequence_audio_tracks.items():
+            ET.dump(v)
+        """
+
+        # Save it to the object
+        self.autosequence = sequence
+
+    def generate(self):
+        return self.autosequence
 
 
 class Project:
@@ -453,16 +604,16 @@ class Project:
 
 def main():
     TEMP_LIST_OF_FILES = [
-        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071220_C001.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071221_C002.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071223_C003.mov",
         "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071229_C004.mov",
-        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_005.WAV",
+        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 1\\A001_06071243_C005.mov",
         "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_001.WAV",
         "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_002.WAV",
         "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_003.WAV",
         "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_004.WAV",
+        "S:\\Projects\\HAZEN_ALPHA\\AUDIO\\F8_SD2\\130619\\130619_005.WAV",
     ]
     TEMP_PROJECT_XML_DESTINATION = 'samples\\sample_out_5.xml'
     CREATE_SEPARATE_AUTOSEQUENCES = True
@@ -489,14 +640,13 @@ def main():
     video_items = [ item for item in media_items if item.mediaType == 'video' ]
     audio_items = [ item for item in media_items if item.mediaType == 'audio' ]
 
-    masterclips_video = MasterClips(project, video_items).generate()
-    masterclips_audio = MasterClips(project, audio_items).generate()
+    masterclips_video = MasterClips(project, video_items)
+    masterclips_audio = MasterClips(project, audio_items)
 
-
-    for item in masterclips_video:
-        bin_masterclips_video.append(item)
-    for item in masterclips_audio:
-        bin_masterclips_audio.append(item)
+    for item in video_items:
+        bin_masterclips_video.append(item.masterclip)
+    for item in audio_items:
+        bin_masterclips_audio.append(item.masterclip)
 
 
     """
@@ -505,8 +655,8 @@ def main():
     if CREATE_SEPARATE_AUTOSEQUENCES:
         # Haven't yet found a way to make a combined timeline with both video & audio
 
-        autosequence_video = AutoSequence(video_items).generate('AutoSeq_V')
-        autosequence_audio = AutoSequence(audio_items).generate('AutoSeq_A')
+        autosequence_video = AutoSequence(project, video_items, 'AutoSeq_V').generate()
+        autosequence_audio = AutoSequence(project, audio_items, 'AutoSeq_A').generate()
         bin_sequences.append(autosequence_video)
         bin_sequences.append(autosequence_audio)
 
