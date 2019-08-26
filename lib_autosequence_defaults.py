@@ -1,3 +1,7 @@
+# premiere-autosequence
+# Copyright (c) 2019 - Sebastian Reategui
+# Available to use under MIT License.
+
 DEFAULT_AUDIO_SAMPLE_RATE = 48000
 DEFAULT_AUDIO_BIT_DEPTH = 16
 DEFAULT_AUDIO_CHANNELS = 2

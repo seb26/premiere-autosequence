@@ -7,7 +7,6 @@ import xml.etree.ElementTree as ET
 
 # APPLICATION ASSETS
 from lib_autosequence import *
-import timecode
 
 
 def main():

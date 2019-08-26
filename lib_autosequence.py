@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 from urllib.parse import quote
 
 # APPLICATION ASSETS
-import timecode
+import lib_timecode
 from lib_autosequence_defaults import *
 
 
@@ -123,7 +123,7 @@ class MediaItem:
             self.duration = video_stream['duration_ts']
 
             # Create a timebase object, with which we can make TC/frame conversions
-            self._timebase = timecode.Timecode(self.frameRate)
+            self._timebase = lib_timecode.Timecode(self.frameRate)
             found_timecode = None
 
             # Search for the timecode inside the video stream
@@ -232,7 +232,7 @@ class MediaItem:
             # Search for an audio time-of-day timecode
             # Time_reference is usually the number of samples since midnight.
             if 'time_reference' in self.probe['format']['tags']:
-                self._timebase = timecode.Timecode(self.frameRate)
+                self._timebase = lib_timecode.Timecode(self.frameRate)
                 samples_since_midnight = int(self.probe['format']['tags']['time_reference'])
                 seconds_since_midnight = samples_since_midnight / self.audio_sample_rate
                 self.startFrame = int(seconds_since_midnight * self.frameRate)
@@ -456,7 +456,7 @@ class AutoSequence:
         # DEBUG: print(autoseq_start, autoseq_end, autoseq_duration)
 
         # Create timecode (HH:MM:SS:FF) versions of the above values
-        autoseq_timebase = timecode.Timecode(earliest_clip.frameRate)
+        autoseq_timebase = lib_timecode.Timecode(earliest_clip.frameRate)
         autoseq_start_tc = autoseq_timebase.toTC(autoseq_start)
         # DEBUG: print(autoseq_start_tc)
 
