@@ -87,11 +87,15 @@ class MediaItem:
                 '-show_streams',
                 '-v', 'quiet'
             ],
-            shell=True,
             capture_output=True
         )
-        # Save the probe data
-        self.probe = json.loads(data.stdout)
+        if data.stdout:
+            # Save the probe data
+            self.probe = json.loads(data.stdout)
+        else:
+            print(self.filename, ': error running ffprobe, see below.')
+            print(data.stderr)
+            return None
 
         video_streams = [ stream for stream in self.probe['streams'] if stream['codec_type'] == 'video' ]
         audio_streams = [ stream for stream in self.probe['streams'] if stream['codec_type'] == 'audio' ]

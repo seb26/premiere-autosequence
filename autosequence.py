@@ -4,21 +4,25 @@
 
 import os
 import xml.etree.ElementTree as ET
+import argparse
 
 # APPLICATION ASSETS
 from lib_autosequence import *
 
 
 def main():
-    TEMP_LIST_OF_FILES = [
-        "Q:\\Projects\\HAZEN_ALPHA\\MEDIA_OCM\\DAY 2\\A002_06081938_C029.mov",
-    ]
-    TEMP_PROJECT_XML_DESTINATION = 'samples\\sample_out_5.xml'
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument( "FILEPATHS", nargs="+", help="Path(s) to media files", type=str)
+    args = parser.parse_args()
+
+    LIST_OF_FILES = args.FILEPATHS
+    PROJECT_XML_DESTINATION = 'samples/sample_out_6.xml'
     CREATE_SEPARATE_AUTOSEQUENCES = True
 
     media_items = []
-    print('Media files given: ', len(TEMP_LIST_OF_FILES))
-    for filepath in TEMP_LIST_OF_FILES:
+    print('Media files given: ', len(LIST_OF_FILES))
+    for filepath in LIST_OF_FILES:
         media_item = MediaItem(filepath)
         media_items.append(media_item)
 
@@ -61,7 +65,7 @@ def main():
             autosequence_audio = AutoSequence(project, audio_items, 'AutoSeq_A').generate()
             bin_sequences.append(autosequence_audio)
 
-    project.generateProjectXML(TEMP_PROJECT_XML_DESTINATION)
+    project.generateProjectXML(PROJECT_XML_DESTINATION)
 
 if __name__ == "__main__":
     main()
