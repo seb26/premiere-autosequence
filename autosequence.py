@@ -59,10 +59,10 @@ def main():
         # Haven't yet found a way to make a combined timeline with both video & audio
 
         if len(video_items) > 0:
-            autosequence_video = AutoSequence(project, video_items, 'AutoSeq_V').generate()
+            autosequence_video = AutoSequence(project, video_items).generate()
             bin_sequences.append(autosequence_video)
         if len(audio_items) > 0:
-            autosequence_audio = AutoSequence(project, audio_items, 'AutoSeq_A').generate()
+            autosequence_audio = AutoSequence(project, audio_items).generate()
             bin_sequences.append(autosequence_audio)
 
     project.generateProjectXML(PROJECT_XML_DESTINATION)

@@ -178,6 +178,13 @@ class MediaItem:
             else:
                 self.fielddominance = DEFAULT_VIDEO_ATTRIBUTES['fielddominance']
 
+            # Look for a very specific metadata field to find REEL OR TAPE NAME
+            # Otherwise, set the reel name to the filename
+            if 'com.apple.proapps.clipID' in self.probe['format']['tags']:
+                self.reelName = self.probe['format']['tags']['com.apple.proapps.clipID']
+            else:
+                self.reelName = self.filename
+
             # Need to connect these to Ffprobe and be accurate
             self.alphatype = DEFAULT_VIDEO_ATTRIBUTES['alphatype']
             self.anamorphic = DEFAULT_VIDEO_ATTRIBUTES['anamorphic']
@@ -232,6 +239,11 @@ class MediaItem:
             if not hasattr(self, 'frameRate'):
                 # If we didn't manage to find the frame rate
                 self.frameRate = DEFAULT_VIDEO_FRAME_RATE
+
+            # Search for a TAPE or REEL name in the BEXT data
+            if 'zTAPE' in BEXT_DATA.keys():
+                # No need to regex it, just take the whole string
+                self.tapeName = BEXT_DATA['zTAPE']
 
             # Search for an audio time-of-day timecode
             # Time_reference is usually the number of samples since midnight.
@@ -431,7 +443,7 @@ class MasterClips:
 
 
 class AutoSequence:
-    def __init__(self, project, media_items, desired_sequence_name):
+    def __init__(self, project, media_items, desired_sequence_name=None):
         """
         # Given a list of MediaItem objects
         # Create a <sequence>
@@ -499,7 +511,14 @@ class AutoSequence:
         for k, v in DEFAULT_SEQUENCE_ATTRIBUTES.items():
             sequence.set(k, v)
 
-        sequence_name = createElem(sequence, 'name', desired_sequence_name)
+        # Check the name. If specified, use it
+        # Otherwise take the reelname
+        if desired_sequence_name:
+            sequence_name = desired_sequence_name
+        else:
+            sequence_name = 'AutoSeq_' + earliest_clip.reelName
+
+        sequence_name_tag = createElem(sequence, 'name', sequence_name)
         sequence.append(earliest_clip.frameRateTag)
         sequence_duration = createElem(sequence, 'duration', autoseq_duration)
         sequence_timecode_tag = createElem(sequence, 'timecode')
